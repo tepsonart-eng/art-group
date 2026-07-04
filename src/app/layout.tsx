@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { fraunces, poppins, inter } from "@/lib/fonts";
+import { poppins, inter } from "@/lib/fonts";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -18,7 +18,7 @@ export default function RootLayout({
     <html
       lang="fr"
       suppressHydrationWarning
-      className={`${fraunces.variable} ${poppins.variable} ${inter.variable} h-full antialiased`}
+      className={`${poppins.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-surface text-text">
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>

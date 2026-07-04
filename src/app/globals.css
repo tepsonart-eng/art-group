@@ -48,7 +48,7 @@
   --color-text: var(--text);
   --color-text-muted: var(--text-muted);
 
-  --font-serif: var(--font-fraunces);
+  --font-serif: var(--font-poppins);
   --font-display: var(--font-poppins);
   --font-sans: var(--font-inter);
 }
