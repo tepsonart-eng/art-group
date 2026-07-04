@@ -1,10 +1,12 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
-const url = (process.env.DATABASE_URL ?? "file:./dev.db").replace(/^file:/, "");
-const adapter = new PrismaBetterSqlite3({ url });
+if (!process.env.DATABASE_URL) {
+  throw new Error("DATABASE_URL n'est pas défini. Voir le README pour la configuration.");
+}
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 const ADMIN_EMAIL = "tepsonart@gmail.com";
