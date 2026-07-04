@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --accent: #e11d2e;
+  --accent-dark: #a1131f;
+  --accent-soft: #fdeceb;
+  --ink: #0a0a0a;
+  --ink-soft: #1c1c1c;
+  --surface: #ffffff;
+  --surface-alt: #f7f4f1;
+  --line: #e6e1db;
+  --text: #16130f;
+  --text-muted: #5b564f;
+}
+
+[data-palette="cobalt"] {
+  --accent: #1a4fb4;
+  --accent-dark: #0f3480;
+  --accent-soft: #eaf1fc;
+}
+
+.dark {
+  --ink: #050505;
+  --ink-soft: #121212;
+  --surface: #0b0b0d;
+  --surface-alt: #151517;
+  --line: #2a2a2d;
+  --text: #f4f2ee;
+  --text-muted: #a8a29a;
+  --accent-soft: #241213;
+}
+
+.dark[data-palette="cobalt"] {
+  --accent-soft: #10192b;
+}
+
+@theme inline {
+  --color-accent: var(--accent);
+  --color-accent-dark: var(--accent-dark);
+  --color-accent-soft: var(--accent-soft);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-surface: var(--surface);
+  --color-surface-alt: var(--surface-alt);
+  --color-line: var(--line);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+
+  --font-serif: var(--font-fraunces);
+  --font-display: var(--font-poppins);
+  --font-sans: var(--font-inter);
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-inter), sans-serif;
+}
+
+::selection {
+  background: var(--accent);
+  color: white;
+}
+
+@layer components {
+  .btn-pill {
+    @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-display font-semibold text-sm tracking-wide transition-transform duration-200 ease-out hover:-translate-y-0.5;
+  }
+
+  .btn-pill-solid {
+    @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-display font-semibold text-sm tracking-wide transition-transform duration-200 ease-out hover:-translate-y-0.5 bg-accent text-white shadow-lg shadow-accent/20 hover:bg-accent-dark;
+  }
+
+  .btn-pill-outline {
+    @apply inline-flex items-center gap-2 rounded-full px-6 py-3 font-display font-semibold text-sm tracking-wide transition-transform duration-200 ease-out hover:-translate-y-0.5 border-2 border-accent text-accent bg-transparent hover:bg-accent hover:text-white;
+  }
+
+  .divider-dots {
+    @apply relative mx-auto my-6 h-px w-24 bg-accent/60;
+  }
+  .divider-dots::before,
+  .divider-dots::after {
+    content: "";
+    @apply absolute top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-accent;
+  }
+  .divider-dots::before {
+    left: -4px;
+  }
+  .divider-dots::after {
+    right: -4px;
+  }
+
+  .timeline-item {
+    @apply relative pl-8 border-l-2 border-line;
+  }
+  .timeline-item::before {
+    content: "";
+    @apply absolute -left-[7px] top-1 h-3 w-3 rounded-full bg-accent;
+  }
+
+  .accent-serif {
+    @apply font-serif italic font-normal;
+  }
+  .accent-bold {
+    @apply font-display font-extrabold;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}

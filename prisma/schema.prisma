@@ -1,0 +1,228 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  EDITOR
+  MODERATOR
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  HIDDEN
+}
+
+enum LogoType {
+  PARTNER
+  ARTIST
+}
+
+enum SocialPlatform {
+  FACEBOOK
+  INSTAGRAM
+  TIKTOK
+  YOUTUBE
+  LINKEDIN
+  WHATSAPP
+}
+
+enum Palette {
+  RED_BLACK
+  COBALT_GOLD
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         AdminRole @default(EDITOR)
+  createdAt    DateTime  @default(now())
+  sessions     Session[]
+}
+
+model Session {
+  id          String    @id @default(cuid())
+  token       String    @unique
+  adminUser   AdminUser @relation(fields: [adminUserId], references: [id], onDelete: Cascade)
+  adminUserId String
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+}
+
+model Category {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  order     Int     @default(0)
+  visualOnly Boolean @default(false)
+  titleFr   String
+  titleEn   String
+  itemsFr   String  @default("")
+  itemsEn   String  @default("")
+  colorFrom String  @default("#dc2626")
+  colorTo   String  @default("#111111")
+}
+
+model PortfolioTab {
+  id      String @id @default(cuid())
+  slug    String @unique
+  labelFr String
+  labelEn String
+  order   Int    @default(0)
+}
+
+model Project {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  titleFr       String
+  titleEn       String
+  category      String
+  colorFrom     String   @default("#dc2626")
+  colorTo       String   @default("#111111")
+  youtubeUrl    String?
+  contextFr     String   @default("")
+  contextEn     String   @default("")
+  objectivesFr  String   @default("")
+  objectivesEn  String   @default("")
+  location      String   @default("")
+  projectDate   String   @default("")
+  order         Int      @default(0)
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  clientName  String
+  clientRole  String   @default("")
+  companyName String   @default("")
+  colorHex    String   @default("#dc2626")
+  quoteFr     String
+  quoteEn     String
+  rating      Int      @default(5)
+  verified    Boolean  @default(true)
+  order       Int      @default(0)
+}
+
+model Review {
+  id          String       @id @default(cuid())
+  authorName  String
+  authorEmail String
+  rating      Int          @default(5)
+  comment     String
+  status      ReviewStatus @default(PENDING)
+  ipAddress   String       @default("")
+  createdAt   DateTime     @default(now())
+}
+
+model BannedIp {
+  id        String   @id @default(cuid())
+  ip        String   @unique
+  reason    String   @default("")
+  createdAt DateTime @default(now())
+}
+
+model FaqItem {
+  id         String @id @default(cuid())
+  questionFr String
+  questionEn String
+  answerFr   String
+  answerEn   String
+  order      Int    @default(0)
+}
+
+model PartnerLogo {
+  id       String   @id @default(cuid())
+  name     String
+  type     LogoType @default(PARTNER)
+  colorHex String   @default("#dc2626")
+  order    Int      @default(0)
+}
+
+model SocialLink {
+  id       String         @id @default(cuid())
+  platform SocialPlatform @unique
+  url      String         @default("")
+  visible  Boolean        @default(true)
+}
+
+model ContactMessage {
+  id             String   @id @default(cuid())
+  name           String
+  company        String   @default("")
+  email          String
+  phone          String   @default("")
+  budget         String   @default("")
+  subject        String
+  message        String
+  attachmentPath String?
+  read           Boolean  @default(false)
+  createdAt      DateTime @default(now())
+}
+
+model WhyChooseUsItem {
+  id      String @id @default(cuid())
+  iconKey String @default("sparkles")
+  titleFr String
+  titleEn String
+  textFr  String
+  textEn  String
+  order   Int    @default(0)
+}
+
+model CommitmentItem {
+  id      String @id @default(cuid())
+  iconKey String @default("sparkles")
+  titleFr String
+  titleEn String
+  textFr  String
+  textEn  String
+  order   Int    @default(0)
+}
+
+model SiteSetting {
+  id                String   @id @default("singleton")
+  palette           Palette  @default(RED_BLACK)
+  reviewModeration  Boolean  @default(true)
+  heroTaglinesFr    String   @default("")
+  heroTaglinesEn    String   @default("")
+  agencyIntroFr     String   @default("")
+  agencyIntroEn     String   @default("")
+  aboutTextFr       String   @default("")
+  aboutTextEn       String   @default("")
+  teamTextFr        String   @default("")
+  teamTextEn        String   @default("")
+  planetTextFr      String   @default("")
+  planetTextEn      String   @default("")
+  adSpaceTitleFr    String   @default("")
+  adSpaceTitleEn    String   @default("")
+  adSpaceTextFr     String   @default("")
+  adSpaceTextEn     String   @default("")
+  ctaTitleFr        String   @default("")
+  ctaTitleEn        String   @default("")
+  contactQuoteFr    String   @default("")
+  contactQuoteEn    String   @default("")
+  trustTitleFr      String   @default("")
+  trustTitleEn      String   @default("")
+  phone1            String   @default("")
+  phone2            String   @default("")
+  contactEmail      String   @default("")
+  addressFr         String   @default("")
+  addressEn         String   @default("")
+  whatsappNumber    String   @default("")
+  mapEmbedUrl       String   @default("")
+  rccm              String   @default("")
+  legalAddress      String   @default("")
+  brochurePdfPath   String?
+  logoLightPath     String?
+  logoDarkPath      String?
+  heroVideoPath     String?
+  updatedAt         DateTime @updatedAt
+}
