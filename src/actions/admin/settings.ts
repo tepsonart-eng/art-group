@@ -71,19 +71,34 @@ export async function updateSiteSettings(
     if (logo2 instanceof File && logo2.size > 0) {
       data.logoDarkPath = await saveSiteAsset(logo2, "image");
     }
-    const video = formData.get("heroVideo");
-    if (video instanceof File && video.size > 0) {
-      data.heroVideoPath = await saveSiteAsset(video, "video");
-    }
     const brochure = formData.get("brochurePdf");
     if (brochure instanceof File && brochure.size > 0) {
       data.brochurePdfPath = await saveSiteAsset(brochure, "document");
+    }
+    const whyUsImage = formData.get("whyUsImage");
+    if (whyUsImage instanceof File && whyUsImage.size > 0) {
+      data.whyUsImagePath = await saveSiteAsset(whyUsImage, "image");
+    }
+    const adSpaceImage = formData.get("adSpaceImage");
+    if (adSpaceImage instanceof File && adSpaceImage.size > 0) {
+      data.adSpaceMediaPath = await saveSiteAsset(adSpaceImage, "image");
+      data.adSpaceMediaType = "image";
     }
   } catch (err) {
     if (err instanceof UploadError) {
       return { status: "error", message: err.message };
     }
     throw err;
+  }
+
+  // Uploaded client-side directly to Blob storage; these fields already hold the resulting URL.
+  const heroVideoPath = str(formData, "heroVideoPath");
+  if (heroVideoPath) data.heroVideoPath = heroVideoPath;
+
+  const adSpaceVideoPath = str(formData, "adSpaceVideoPath");
+  if (adSpaceVideoPath) {
+    data.adSpaceMediaPath = adSpaceVideoPath;
+    data.adSpaceMediaType = "video";
   }
 
   await prisma.siteSetting.upsert({

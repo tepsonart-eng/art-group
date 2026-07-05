@@ -145,6 +145,7 @@ async function main() {
       { slug: "motion-design", labelFr: "Motion Design", labelEn: "Motion Design", order: 2 },
       { slug: "portrait-interview", labelFr: "Portrait & Interview", labelEn: "Portrait & Interview", order: 3 },
       { slug: "publicite", labelFr: "Publicité", labelEn: "Advertising", order: 4 },
+      { slug: "clips-video", labelFr: "Nos clips vidéos", labelEn: "Our video clips", order: 5 },
     ],
   });
 

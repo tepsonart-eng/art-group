@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { LogoMark } from "@/components/logo";
 import { socialIconMap } from "@/components/social-icons";
 import { useDictionary } from "@/components/dictionary-provider";
@@ -17,12 +18,14 @@ export function Footer({
   phone2,
   contactEmail,
   address,
+  logoPath,
 }: {
   socialLinks: FooterSocialLink[];
   phone1: string;
   phone2: string;
   contactEmail: string;
   address: string;
+  logoPath?: string | null;
 }) {
   const { dict, locale } = useDictionary();
   const { open } = useAboutModal();
@@ -33,7 +36,11 @@ export function Footer({
         <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr_1fr_1fr]">
           <div>
             <div className="flex items-center gap-3">
-              <LogoMark className="h-14 w-14" color="white" />
+              {logoPath ? (
+                <Image src={logoPath} alt="TEPSON ART GROUP" width={56} height={56} className="h-14 w-14 object-contain" />
+              ) : (
+                <LogoMark className="h-14 w-14" color="white" />
+              )}
             </div>
             <p className="mt-4 max-w-xs font-serif italic text-lg text-white/90">
               {dict.footer.tagline}

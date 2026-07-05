@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { upsertProject, deleteProject } from "@/actions/admin/projects";
 import { DeleteButton } from "@/components/admin/delete-button";
 import { TextField, TextArea } from "@/components/admin/fields";
+import { VideoUploadField } from "@/components/admin/video-upload-field";
 
 export default async function AdminProjectsPage() {
   const [projects, tabs] = await Promise.all([
@@ -16,7 +17,8 @@ export default async function AdminProjectsPage() {
         Le champ « Catégorie » doit correspondre au slug d&apos;un des filtres définis dans « Filtres réalisations »
         (
         {tabs.map((t) => t.slug).join(", ") || "aucun filtre défini pour le moment"}
-        ).
+        ). Vous pouvez renseigner une URL YouTube <strong>ou</strong> uploader directement un fichier vidéo haute
+        qualité (le fichier uploadé est utilisé en priorité s&apos;il est présent).
       </p>
 
       <div className="mt-8 space-y-4">
@@ -34,6 +36,12 @@ export default async function AdminProjectsPage() {
               <TextField name="colorFrom" label="Couleur (début)" type="color" defaultValue={project.colorFrom} />
               <TextField name="colorTo" label="Couleur (fin)" type="color" defaultValue={project.colorTo} />
               <TextField name="youtubeUrl" label="URL YouTube" defaultValue={project.youtubeUrl ?? ""} />
+              <VideoUploadField
+                name="videoFilePath"
+                label="Vidéo haute qualité (upload direct)"
+                current={project.videoFilePath}
+                folder="portfolio"
+              />
               <TextField name="location" label="Lieu" defaultValue={project.location} />
               <TextField name="projectDate" label="Date" defaultValue={project.projectDate} />
               <TextField name="order" label="Ordre" type="number" defaultValue={String(project.order)} />
@@ -66,6 +74,7 @@ export default async function AdminProjectsPage() {
           <TextField name="colorFrom" label="Couleur (début)" type="color" defaultValue="#e11d2e" />
           <TextField name="colorTo" label="Couleur (fin)" type="color" defaultValue="#111111" />
           <TextField name="youtubeUrl" label="URL YouTube" />
+          <VideoUploadField name="videoFilePath" label="Vidéo haute qualité (upload direct)" folder="portfolio" />
           <TextField name="location" label="Lieu" />
           <TextField name="projectDate" label="Date" />
           <TextField name="order" label="Ordre" type="number" defaultValue="0" />

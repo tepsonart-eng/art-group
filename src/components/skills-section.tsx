@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { useDictionary } from "@/components/dictionary-provider";
 
@@ -13,6 +14,7 @@ export type CategoryEntry = {
   itemsEn: string;
   colorFrom: string;
   colorTo: string;
+  imagePath: string | null;
 };
 
 export function SkillsSection({ categories }: { categories: CategoryEntry[] }) {
@@ -48,13 +50,21 @@ export function SkillsSection({ categories }: { categories: CategoryEntry[] }) {
               }`}
             >
               <div
-                className="flex h-48 items-end p-6 transition-transform duration-500 group-hover:scale-[1.03]"
-                style={{
-                  background: `linear-gradient(135deg, ${cat.colorFrom}, ${cat.colorTo})`,
-                }}
+                className="relative flex h-48 items-end overflow-hidden p-6 transition-transform duration-500 group-hover:scale-[1.03]"
+                style={
+                  cat.imagePath
+                    ? undefined
+                    : { background: `linear-gradient(135deg, ${cat.colorFrom}, ${cat.colorTo})` }
+                }
               >
+                {cat.imagePath && (
+                  <>
+                    <Image src={cat.imagePath} alt={title} fill className="object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+                  </>
+                )}
                 {cat.visualOnly && (
-                  <h3 className="font-display text-2xl font-extrabold text-white drop-shadow">
+                  <h3 className="relative font-display text-2xl font-extrabold text-white drop-shadow">
                     {title}
                   </h3>
                 )}

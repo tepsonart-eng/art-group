@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Sparkles, ShieldCheck, Gauge, Leaf } from "lucide-react";
 import { useDictionary } from "@/components/dictionary-provider";
@@ -15,7 +16,13 @@ export type WhyChooseUsEntry = {
   textEn: string;
 };
 
-export function WhyChooseUsSection({ items }: { items: WhyChooseUsEntry[] }) {
+export function WhyChooseUsSection({
+  items,
+  imagePath,
+}: {
+  items: WhyChooseUsEntry[];
+  imagePath?: string | null;
+}) {
   const { dict, locale } = useDictionary();
 
   return (
@@ -58,9 +65,13 @@ export function WhyChooseUsSection({ items }: { items: WhyChooseUsEntry[] }) {
           transition={{ duration: 0.6 }}
           className="relative aspect-square overflow-hidden rounded-3xl bg-gradient-to-br from-ink via-accent-dark to-accent"
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <Sparkles className="text-white/30" size={120} />
-          </div>
+          {imagePath ? (
+            <Image src={imagePath} alt="" fill className="object-cover" />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Sparkles className="text-white/30" size={120} />
+            </div>
+          )}
         </motion.div>
       </div>
     </section>

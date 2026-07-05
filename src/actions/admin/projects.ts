@@ -26,6 +26,7 @@ export async function upsertProject(formData: FormData) {
     colorFrom: str(formData, "colorFrom") || "#e11d2e",
     colorTo: str(formData, "colorTo") || "#111111",
     youtubeUrl: str(formData, "youtubeUrl") || null,
+    videoFilePath: str(formData, "videoFilePath") || null,
     contextFr: str(formData, "contextFr"),
     contextEn: str(formData, "contextEn"),
     objectivesFr: str(formData, "objectivesFr"),

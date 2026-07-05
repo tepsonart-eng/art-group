@@ -109,12 +109,14 @@ export default async function HomePage({
       <Hero taglinesFr={taglinesFr} taglinesEn={taglinesEn} videoPath={settings.heroVideoPath} />
       <SkillsSection categories={categories} />
       <AgencySection introFr={settings.agencyIntroFr} introEn={settings.agencyIntroEn} />
-      <WhyChooseUsSection items={whyItems} />
+      <WhyChooseUsSection items={whyItems} imagePath={settings.whyUsImagePath} />
       <AdSpace
         titleFr={settings.adSpaceTitleFr}
         titleEn={settings.adSpaceTitleEn}
         textFr={settings.adSpaceTextFr}
         textEn={settings.adSpaceTextEn}
+        mediaPath={settings.adSpaceMediaPath}
+        mediaType={settings.adSpaceMediaType}
       />
       <LogoMarquee logos={logos} />
       <PortfolioSection projects={projects} tabs={tabs} />

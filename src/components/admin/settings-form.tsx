@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { updateSiteSettings, type SettingsFormState } from "@/actions/admin/settings";
 import type { SiteSettings } from "@/lib/settings";
 import { TextField, TextArea } from "@/components/admin/fields";
+import { VideoUploadField } from "@/components/admin/video-upload-field";
 
 const initialState: SettingsFormState = { status: "idle" };
 
@@ -35,7 +36,7 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
       <Section title="Médias (logo, vidéo, brochure)">
         <FileField name="logoLight" label="Logo — fond clair" current={settings.logoLightPath} accept="image/*" />
         <FileField name="logoDark" label="Logo — fond sombre" current={settings.logoDarkPath} accept="image/*" />
-        <FileField name="heroVideo" label="Vidéo d'accueil (boucle)" current={settings.heroVideoPath} accept="video/*" />
+        <VideoUploadField name="heroVideoPath" label="Vidéo d'accueil (boucle)" current={settings.heroVideoPath} folder="hero" />
         <FileField name="brochurePdf" label="Brochure PDF de présentation" current={settings.brochurePdfPath} accept=".pdf" />
       </Section>
 
@@ -60,6 +61,27 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
         <TextField name="adSpaceTitleEn" label="Titre (EN)" defaultValue={settings.adSpaceTitleEn} />
         <TextArea name="adSpaceTextFr" label="Texte (FR)" defaultValue={settings.adSpaceTextFr} full />
         <TextArea name="adSpaceTextEn" label="Texte (EN)" defaultValue={settings.adSpaceTextEn} full />
+        <FileField
+          name="adSpaceImage"
+          label="Photo (JPG/PNG — remplace le bandeau si aucune vidéo n'est fournie)"
+          current={settings.adSpaceMediaType === "image" ? settings.adSpaceMediaPath : null}
+          accept="image/*"
+        />
+        <VideoUploadField
+          name="adSpaceVideoPath"
+          label="Vidéo (prioritaire sur la photo si les deux sont fournies)"
+          current={settings.adSpaceMediaType === "video" ? settings.adSpaceMediaPath : null}
+          folder="ad-space"
+        />
+      </Section>
+
+      <Section title="Pourquoi choisir TEPSON ART GROUP">
+        <FileField
+          name="whyUsImage"
+          label="Image du grand cadre (JPG/PNG)"
+          current={settings.whyUsImagePath}
+          accept="image/*"
+        />
       </Section>
 
       <Section title="Appel à l'action & contact">

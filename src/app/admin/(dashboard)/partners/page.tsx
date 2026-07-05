@@ -15,8 +15,8 @@ export default async function AdminPartnersPage() {
     <div>
       <h1 className="font-display text-2xl font-bold">Bandeau défilant</h1>
       <p className="mt-1 text-sm text-text-muted">
-        Logos de partenaires et photos d&apos;artistes affichés dans le bandeau défilant. Un badge de couleur avec le
-        nom sert de repère en attendant les vrais visuels (à téléverser plus tard).
+        Logos de partenaires et photos d&apos;artistes affichés dans le bandeau défilant. Uploadez une image
+        (JPG/PNG) pour l&apos;afficher ; sans image, un badge de couleur avec le nom est utilisé à la place.
       </p>
 
       <div className="mt-8 space-y-4">
@@ -27,8 +27,22 @@ export default async function AdminPartnersPage() {
               <input type="hidden" name="id" value={logo.id} />
               <TextField name="name" label="Nom" defaultValue={logo.name} />
               <SelectField name="type" label="Type" defaultValue={logo.type} options={TYPES} />
-              <TextField name="colorHex" label="Couleur" type="color" defaultValue={logo.colorHex} />
+              <TextField name="colorHex" label="Couleur (si pas d'image)" type="color" defaultValue={logo.colorHex} />
               <TextField name="order" label="Ordre" type="number" defaultValue={String(logo.order)} />
+              <div className="sm:col-span-2">
+                <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+                  Logo (JPG/PNG)
+                </label>
+                <input
+                  type="file"
+                  name="logoImage"
+                  accept="image/*"
+                  className="w-full rounded-lg border border-dashed border-line bg-surface px-3 py-2 text-sm outline-none file:mr-3 file:rounded-full file:border-0 file:bg-accent-soft file:px-3 file:py-1 file:text-accent"
+                />
+                {logo.logoImagePath && (
+                  <p className="mt-1 truncate text-xs text-text-muted">Actuel : {logo.logoImagePath}</p>
+                )}
+              </div>
               <div className="sm:col-span-2">
                 <button type="submit" className="btn-pill-solid">Enregistrer</button>
               </div>
@@ -45,8 +59,19 @@ export default async function AdminPartnersPage() {
         <form action={upsertPartnerLogo} className="mt-4 grid gap-3 sm:grid-cols-2">
           <TextField name="name" label="Nom" />
           <SelectField name="type" label="Type" options={TYPES} />
-          <TextField name="colorHex" label="Couleur" type="color" defaultValue="#e11d2e" />
+          <TextField name="colorHex" label="Couleur (si pas d'image)" type="color" defaultValue="#e11d2e" />
           <TextField name="order" label="Ordre" type="number" defaultValue="0" />
+          <div className="sm:col-span-2">
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+              Logo (JPG/PNG)
+            </label>
+            <input
+              type="file"
+              name="logoImage"
+              accept="image/*"
+              className="w-full rounded-lg border border-dashed border-line bg-surface px-3 py-2 text-sm outline-none file:mr-3 file:rounded-full file:border-0 file:bg-accent-soft file:px-3 file:py-1 file:text-accent"
+            />
+          </div>
           <button type="submit" className="btn-pill-solid sm:col-span-2">Ajouter</button>
         </form>
       </div>

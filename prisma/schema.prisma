@@ -68,6 +68,7 @@ model Category {
   itemsEn   String  @default("")
   colorFrom String  @default("#dc2626")
   colorTo   String  @default("#111111")
+  imagePath String?
 }
 
 model PortfolioTab {
@@ -87,6 +88,7 @@ model Project {
   colorFrom     String   @default("#dc2626")
   colorTo       String   @default("#111111")
   youtubeUrl    String?
+  videoFilePath String?
   contextFr     String   @default("")
   contextEn     String   @default("")
   objectivesFr  String   @default("")
@@ -139,11 +141,12 @@ model FaqItem {
 }
 
 model PartnerLogo {
-  id       String   @id @default(cuid())
-  name     String
-  type     LogoType @default(PARTNER)
-  colorHex String   @default("#dc2626")
-  order    Int      @default(0)
+  id            String   @id @default(cuid())
+  name          String
+  type          LogoType @default(PARTNER)
+  colorHex      String   @default("#dc2626")
+  logoImagePath String?
+  order         Int      @default(0)
 }
 
 model SocialLink {
@@ -224,5 +227,8 @@ model SiteSetting {
   logoLightPath     String?
   logoDarkPath      String?
   heroVideoPath     String?
+  adSpaceMediaPath  String?
+  adSpaceMediaType  String?
+  whyUsImagePath    String?
   updatedAt         DateTime @updatedAt
 }

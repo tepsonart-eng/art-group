@@ -10,7 +10,8 @@ export default async function AdminCategoriesPage() {
     <div>
       <h1 className="font-display text-2xl font-bold">Compétences (page d&apos;accueil)</h1>
       <p className="mt-1 text-sm text-text-muted">
-        Chaque carte affichée dans la section « Nos offres de films et contenus audiovisuels ».
+        Chaque carte affichée dans la section « Nos offres de films et contenus audiovisuels ». Uploadez une image
+        pour remplacer le dégradé de fond de la carte.
       </p>
 
       <div className="mt-8 space-y-4">
@@ -37,8 +38,22 @@ export default async function AdminCategoriesPage() {
                 defaultValue={cat.itemsEn}
                 full
               />
-              <TextField name="colorFrom" label="Couleur dégradé (début)" defaultValue={cat.colorFrom} type="color" />
-              <TextField name="colorTo" label="Couleur dégradé (fin)" defaultValue={cat.colorTo} type="color" />
+              <TextField name="colorFrom" label="Couleur dégradé (début, si pas d'image)" defaultValue={cat.colorFrom} type="color" />
+              <TextField name="colorTo" label="Couleur dégradé (fin, si pas d'image)" defaultValue={cat.colorTo} type="color" />
+              <div className="sm:col-span-2">
+                <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+                  Image de fond (JPG/PNG)
+                </label>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  className="w-full rounded-lg border border-dashed border-line bg-surface px-3 py-2 text-sm outline-none file:mr-3 file:rounded-full file:border-0 file:bg-accent-soft file:px-3 file:py-1 file:text-accent"
+                />
+                {cat.imagePath && (
+                  <p className="mt-1 truncate text-xs text-text-muted">Actuel : {cat.imagePath}</p>
+                )}
+              </div>
               <label className="flex items-center gap-2 text-sm">
                 <input type="checkbox" name="visualOnly" defaultChecked={cat.visualOnly} />
                 Visuel uniquement (sans liste, ex. « Vidéos musicales & d&apos;art »)
@@ -63,8 +78,19 @@ export default async function AdminCategoriesPage() {
           <TextField name="titleEn" label="Titre (EN)" />
           <TextArea name="itemsFr" label="Liste des prestations (FR)" full />
           <TextArea name="itemsEn" label="Liste des prestations (EN)" full />
-          <TextField name="colorFrom" label="Couleur dégradé (début)" type="color" defaultValue="#e11d2e" />
-          <TextField name="colorTo" label="Couleur dégradé (fin)" type="color" defaultValue="#111111" />
+          <TextField name="colorFrom" label="Couleur dégradé (début, si pas d'image)" type="color" defaultValue="#e11d2e" />
+          <TextField name="colorTo" label="Couleur dégradé (fin, si pas d'image)" type="color" defaultValue="#111111" />
+          <div className="sm:col-span-2">
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+              Image de fond (JPG/PNG)
+            </label>
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              className="w-full rounded-lg border border-dashed border-line bg-surface px-3 py-2 text-sm outline-none file:mr-3 file:rounded-full file:border-0 file:bg-accent-soft file:px-3 file:py-1 file:text-accent"
+            />
+          </div>
           <label className="flex items-center gap-2 text-sm">
             <input type="checkbox" name="visualOnly" />
             Visuel uniquement

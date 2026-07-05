@@ -15,6 +15,7 @@ export type ProjectEntry = {
   colorFrom: string;
   colorTo: string;
   youtubeUrl: string | null;
+  videoFilePath: string | null;
   contextFr: string;
   contextEn: string;
   objectivesFr: string;
@@ -114,7 +115,7 @@ export function PortfolioSection({
                   <h3 className="font-display text-lg font-bold text-white">{title}</h3>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/60 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                  {project.youtubeUrl && (
+                  {(project.youtubeUrl || project.videoFilePath) && (
                     <button onClick={() => setVideoProject(project)} className="btn-pill-solid">
                       {dict.portfolio.watchVideo}
                     </button>
@@ -130,16 +131,25 @@ export function PortfolioSection({
       )}
 
       <AnimatePresence>
-        {videoProject?.youtubeUrl && (
+        {videoProject && (videoProject.videoFilePath || videoProject.youtubeUrl) && (
           <ModalShell onClose={() => setVideoProject(null)}>
             <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
-              <iframe
-                src={`https://www.youtube.com/embed/${getYoutubeId(videoProject.youtubeUrl)}`}
-                title={locale === "fr" ? videoProject.titleFr : videoProject.titleEn}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="h-full w-full"
-              />
+              {videoProject.videoFilePath ? (
+                <video
+                  src={videoProject.videoFilePath}
+                  controls
+                  autoPlay
+                  className="h-full w-full"
+                />
+              ) : (
+                <iframe
+                  src={`https://www.youtube.com/embed/${getYoutubeId(videoProject.youtubeUrl!)}`}
+                  title={locale === "fr" ? videoProject.titleFr : videoProject.titleEn}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="h-full w-full"
+                />
+              )}
             </div>
           </ModalShell>
         )}

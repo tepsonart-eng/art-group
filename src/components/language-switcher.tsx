@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { locales, type Locale } from "@/lib/i18n";
 
-export function LanguageSwitcher({ locale }: { locale: Locale }) {
+export function LanguageSwitcher({ locale, light = false }: { locale: Locale; light?: boolean }) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -21,7 +21,11 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
           onClick={() => switchTo(l)}
           aria-current={l === locale}
           className={`rounded-full px-2 py-1 uppercase transition-colors ${
-            l === locale ? "bg-accent text-white" : "text-text-muted hover:text-accent"
+            l === locale
+              ? "bg-accent text-white"
+              : light
+                ? "text-white/70 hover:text-white"
+                : "text-text-muted hover:text-accent"
           }`}
         >
           {l}

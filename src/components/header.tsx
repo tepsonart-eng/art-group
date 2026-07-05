@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 import { Menu, X } from "lucide-react";
 import { LogoLockup } from "@/components/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
@@ -21,8 +22,12 @@ export function Header({
   searchEntries: SearchEntry[];
 }) {
   const { dict, locale } = useDictionary();
+  const { resolvedTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     function onScroll() {
@@ -33,12 +38,20 @@ export function Header({
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // The hero behind a transparent header is always dark, so white content is
+  // needed there regardless of the site's light/dark theme. Once scrolled,
+  // the header gets a solid background matching the current theme.
+  const overDarkBackground = !scrolled || (mounted && resolvedTheme === "dark");
+  const useWhiteLogo = !scrolled || (mounted && resolvedTheme === "dark");
+
   const navItems: { href: string; label: string }[] = [
     { href: `/${locale}#competences`, label: dict.skills.titleBold },
     { href: `/${locale}#realisations`, label: dict.portfolio.titleBold },
     { href: `/${locale}#agence`, label: dict.agency.titleBold },
     { href: `/${locale}#contact`, label: dict.nav.contact },
   ];
+
+  const logoSrc = useWhiteLogo ? logoDarkPath || logoLightPath : logoLightPath || logoDarkPath;
 
   return (
     <header
@@ -50,16 +63,16 @@ export function Header({
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3 sm:px-8">
         <Link href={`/${locale}`} aria-label="TEPSON ART GROUP">
-          {logoLightPath || logoDarkPath ? (
+          {logoSrc ? (
             <Image
-              src={(logoDarkPath || logoLightPath) as string}
+              src={logoSrc}
               alt="TEPSON ART GROUP"
               width={140}
               height={40}
               className="h-9 w-auto"
             />
           ) : (
-            <LogoLockup />
+            <LogoLockup color={overDarkBackground ? "#ffffff" : "var(--text)"} />
           )}
         </Link>
 
@@ -68,7 +81,9 @@ export function Header({
             <a
               key={item.href}
               href={item.href}
-              className="font-display text-[13px] font-semibold uppercase tracking-wide text-text transition-colors hover:text-accent"
+              className={`font-display text-[13px] font-semibold uppercase tracking-wide transition-colors hover:text-accent ${
+                overDarkBackground ? "text-white" : "text-text"
+              }`}
             >
               {item.label}
             </a>
@@ -77,13 +92,15 @@ export function Header({
 
         <div className="flex items-center gap-2">
           <div className="hidden sm:block">
-            <SearchOverlay entries={searchEntries} />
+            <SearchOverlay entries={searchEntries} light={overDarkBackground} />
           </div>
-          <LanguageSwitcher locale={locale as Locale} />
-          <ThemeToggle />
+          <LanguageSwitcher locale={locale as Locale} light={overDarkBackground} />
+          <ThemeToggle light={overDarkBackground} />
           <button
             type="button"
-            className="ml-1 flex h-9 w-9 items-center justify-center rounded-full border border-line lg:hidden"
+            className={`ml-1 flex h-9 w-9 items-center justify-center rounded-full border lg:hidden ${
+              overDarkBackground ? "border-white/40 text-white" : "border-line text-text"
+            }`}
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Menu"
           >

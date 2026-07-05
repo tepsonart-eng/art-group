@@ -3,6 +3,19 @@
 import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
+import { saveSiteAsset, UploadError } from "@/lib/upload";
+
+async function safeSaveSiteAsset(file: File, kind: "image" | "video" | "document") {
+  try {
+    return await saveSiteAsset(file, kind);
+  } catch (err) {
+    if (err instanceof UploadError) {
+      console.error("[upload]", err.message);
+      return undefined;
+    }
+    throw err;
+  }
+}
 
 function str(formData: FormData, key: string) {
   return String(formData.get(key) ?? "").trim();
@@ -23,7 +36,7 @@ function refreshSite() {
 export async function upsertCategory(formData: FormData) {
   await requireAdmin();
   const id = str(formData, "id");
-  const data = {
+  const data: Record<string, unknown> = {
     slug: str(formData, "slug"),
     order: num(formData, "order"),
     visualOnly: bool(formData, "visualOnly"),
@@ -34,8 +47,15 @@ export async function upsertCategory(formData: FormData) {
     colorFrom: str(formData, "colorFrom") || "#e11d2e",
     colorTo: str(formData, "colorTo") || "#111111",
   };
+
+  const image = formData.get("image");
+  if (image instanceof File && image.size > 0) {
+    const path = await safeSaveSiteAsset(image, "image");
+    if (path) data.imagePath = path;
+  }
+
   if (id) await prisma.category.update({ where: { id }, data });
-  else await prisma.category.create({ data });
+  else await prisma.category.create({ data: data as never });
   refreshSite();
 }
 
@@ -138,14 +158,21 @@ export async function deleteFaqItem(formData: FormData) {
 export async function upsertPartnerLogo(formData: FormData) {
   await requireAdmin();
   const id = str(formData, "id");
-  const data = {
+  const data: Record<string, unknown> = {
     name: str(formData, "name"),
     type: (str(formData, "type") || "PARTNER") as "PARTNER" | "ARTIST",
     colorHex: str(formData, "colorHex") || "#e11d2e",
     order: num(formData, "order"),
   };
+
+  const logoFile = formData.get("logoImage");
+  if (logoFile instanceof File && logoFile.size > 0) {
+    const path = await safeSaveSiteAsset(logoFile, "image");
+    if (path) data.logoImagePath = path;
+  }
+
   if (id) await prisma.partnerLogo.update({ where: { id }, data });
-  else await prisma.partnerLogo.create({ data });
+  else await prisma.partnerLogo.create({ data: data as never });
   refreshSite();
 }
 

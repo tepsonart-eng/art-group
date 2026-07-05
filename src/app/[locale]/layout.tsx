@@ -68,6 +68,7 @@ export default async function LocaleLayout({
             phone2={settings.phone2}
             contactEmail={settings.contactEmail}
             address={locale === "fr" ? settings.addressFr : settings.addressEn}
+            logoPath={settings.logoDarkPath || settings.logoLightPath}
           />
           <AboutModal
             aboutTextFr={settings.aboutTextFr}

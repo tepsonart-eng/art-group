@@ -10,7 +10,7 @@ export type SearchEntry = {
   group: string;
 };
 
-export function SearchOverlay({ entries }: { entries: SearchEntry[] }) {
+export function SearchOverlay({ entries, light = false }: { entries: SearchEntry[]; light?: boolean }) {
   const { dict } = useDictionary();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -26,7 +26,9 @@ export function SearchOverlay({ entries }: { entries: SearchEntry[] }) {
         type="button"
         aria-label={dict.nav.search}
         onClick={() => setOpen(true)}
-        className="flex h-9 w-9 items-center justify-center rounded-full border border-line text-text transition-colors hover:border-accent hover:text-accent"
+        className={`flex h-9 w-9 items-center justify-center rounded-full border transition-colors hover:border-accent hover:text-accent ${
+          light ? "border-white/40 text-white" : "border-line text-text"
+        }`}
       >
         <Search size={16} />
       </button>

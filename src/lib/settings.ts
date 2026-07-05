@@ -46,6 +46,9 @@ export const defaultSiteSettings = {
   logoLightPath: null as string | null,
   logoDarkPath: null as string | null,
   heroVideoPath: null as string | null,
+  adSpaceMediaPath: null as string | null,
+  adSpaceMediaType: null as string | null,
+  whyUsImagePath: null as string | null,
   updatedAt: new Date(),
 };
 
