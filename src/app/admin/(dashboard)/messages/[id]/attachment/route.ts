@@ -19,12 +19,26 @@ export async function GET(
     return NextResponse.json({ error: "Fichier introuvable" }, { status: 404 });
   }
 
-  const filePath = path.join(process.cwd(), "uploads", "contact", message.attachmentPath);
+  const fileName = message.attachmentPath.split("/").pop() ?? "piece-jointe";
+
   try {
+    if (message.attachmentPath.startsWith("http")) {
+      const response = await fetch(message.attachmentPath);
+      if (!response.ok) throw new Error("fetch failed");
+      const buffer = Buffer.from(await response.arrayBuffer());
+      return new NextResponse(new Uint8Array(buffer), {
+        headers: {
+          "Content-Disposition": `attachment; filename="${fileName}"`,
+          "Content-Type": "application/octet-stream",
+        },
+      });
+    }
+
+    const filePath = path.join(process.cwd(), "uploads", "contact", message.attachmentPath);
     const buffer = await readFile(filePath);
     return new NextResponse(new Uint8Array(buffer), {
       headers: {
-        "Content-Disposition": `attachment; filename="${message.attachmentPath}"`,
+        "Content-Disposition": `attachment; filename="${fileName}"`,
         "Content-Type": "application/octet-stream",
       },
     });

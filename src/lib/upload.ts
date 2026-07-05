@@ -1,11 +1,16 @@
 import { mkdir, writeFile } from "fs/promises";
 import path from "path";
 import crypto from "crypto";
+import { put } from "@vercel/blob";
 
 const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt"];
 const MAX_SIZE_BYTES = 8 * 1024 * 1024;
 
 export class UploadError extends Error {}
+
+function useBlobStorage() {
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+}
 
 export async function saveContactAttachment(file: File): Promise<string | null> {
   if (!file || file.size === 0) return null;
@@ -19,13 +24,17 @@ export async function saveContactAttachment(file: File): Promise<string | null> 
     throw new UploadError("Format de fichier non autorisé (PDF, Word, TXT, RTF, ODT uniquement).");
   }
 
-  const dir = path.join(process.cwd(), "uploads", "contact");
-  await mkdir(dir, { recursive: true });
-
   const safeName = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${ext}`;
   const buffer = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(dir, safeName), buffer);
 
+  if (useBlobStorage()) {
+    const blob = await put(`contact/${safeName}`, buffer, { access: "public" });
+    return blob.url;
+  }
+
+  const dir = path.join(process.cwd(), "uploads", "contact");
+  await mkdir(dir, { recursive: true });
+  await writeFile(path.join(dir, safeName), buffer);
   return safeName;
 }
 
@@ -48,12 +57,16 @@ export async function saveSiteAsset(
     throw new UploadError("Format de fichier non autorisé pour ce champ.");
   }
 
-  const dir = path.join(process.cwd(), "public", "uploads", "site");
-  await mkdir(dir, { recursive: true });
-
   const safeName = `${Date.now()}-${crypto.randomBytes(6).toString("hex")}${ext}`;
   const buffer = Buffer.from(await file.arrayBuffer());
-  await writeFile(path.join(dir, safeName), buffer);
 
+  if (useBlobStorage()) {
+    const blob = await put(`site/${safeName}`, buffer, { access: "public" });
+    return blob.url;
+  }
+
+  const dir = path.join(process.cwd(), "public", "uploads", "site");
+  await mkdir(dir, { recursive: true });
+  await writeFile(path.join(dir, safeName), buffer);
   return `/uploads/site/${safeName}`;
 }
