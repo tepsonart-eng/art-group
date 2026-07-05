@@ -102,10 +102,28 @@ export function PortfolioSection({
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.35 }}
                 className="group relative aspect-[4/3] overflow-hidden rounded-2xl"
-                style={{
-                  background: `linear-gradient(135deg, ${project.colorFrom}, ${project.colorTo})`,
-                }}
+                style={
+                  project.youtubeUrl || project.videoFilePath
+                    ? undefined
+                    : { background: `linear-gradient(135deg, ${project.colorFrom}, ${project.colorTo})` }
+                }
               >
+                {project.youtubeUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={`https://img.youtube.com/vi/${getYoutubeId(project.youtubeUrl)}/hqdefault.jpg`}
+                    alt={title}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                ) : project.videoFilePath ? (
+                  <video
+                    src={project.videoFilePath}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                ) : null}
                 {tabLabel && (
                   <span className="absolute left-4 top-4 z-10 rounded-full bg-white/90 px-3 py-1 text-[11px] font-display font-semibold uppercase tracking-wide text-ink">
                     {tabLabel}
