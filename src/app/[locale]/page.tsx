@@ -11,6 +11,7 @@ import {
   getApprovedReviews,
   getPartnerLogos,
   getWhyChooseUsItems,
+  getTeamMembers,
 } from "@/lib/data";
 import { Hero } from "@/components/hero";
 import { SkillsSection } from "@/components/skills-section";
@@ -23,6 +24,7 @@ import { TrustSection } from "@/components/trust-section";
 import { ReviewsSection } from "@/components/reviews-section";
 import { CTASection } from "@/components/cta-section";
 import { ContactSection } from "@/components/contact-section";
+import { TeamSection } from "@/components/team-section";
 
 export async function generateMetadata({
   params,
@@ -67,7 +69,7 @@ export default async function HomePage({
   if (!isValidLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
 
-  const [settings, categories, projects, tabs, testimonials, reviews, logos, whyItems, socialLinks] =
+  const [settings, categories, projects, tabs, testimonials, reviews, logos, whyItems, socialLinks, teamMembers] =
     await Promise.all([
       getSiteSettings(),
       getCategories(),
@@ -78,6 +80,7 @@ export default async function HomePage({
       getPartnerLogos(),
       getWhyChooseUsItems(),
       getVisibleSocialLinks(),
+      getTeamMembers(),
     ]);
 
   const taglinesFr = settings.heroTaglinesFr.split("\n").map((s) => s.trim()).filter(Boolean);
@@ -133,6 +136,7 @@ export default async function HomePage({
         quoteFr={settings.contactQuoteFr}
         quoteEn={settings.contactQuoteEn}
       />
+      <TeamSection members={teamMembers} />
     </>
   );
 }

@@ -11,6 +11,7 @@ const links = [
   { href: "/admin/categories", label: "Compétences" },
   { href: "/admin/projects", label: "Réalisations" },
   { href: "/admin/portfolio-tabs", label: "Filtres réalisations" },
+  { href: "/admin/team", label: "Équipe" },
   { href: "/admin/testimonials", label: "Témoignages" },
   { href: "/admin/reviews", label: "Avis clients" },
   { href: "/admin/faq", label: "FAQ" },

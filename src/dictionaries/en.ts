@@ -65,6 +65,10 @@ const en: Dictionary = {
     errorNotice: "Something went wrong, please try again.",
     verified: "Verified client",
   },
+  team: {
+    titleAccent: "Our",
+    titleBold: "team",
+  },
   cta: {
     titleAccent: "Got a project?",
     titleBold: "Let's talk about it.",

@@ -190,6 +190,16 @@ model CommitmentItem {
   order   Int    @default(0)
 }
 
+model TeamMember {
+  id        String  @id @default(cuid())
+  name      String
+  roleFr    String  @default("")
+  roleEn    String  @default("")
+  photoPath String?
+  rating    Int     @default(5)
+  order     Int     @default(0)
+}
+
 model SiteSetting {
   id                String   @id @default("singleton")
   palette           Palette  @default(RED_BLACK)

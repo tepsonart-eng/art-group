@@ -301,6 +301,17 @@ async function main() {
     ],
   });
 
+  // --- Team members ---
+  await prisma.teamMember.deleteMany();
+  await prisma.teamMember.createMany({
+    data: [
+      { name: "Tepson Art", roleFr: "Réalisateur & fondateur", roleEn: "Director & founder", rating: 5, order: 0 },
+      { name: "Aïcha Ndongo", roleFr: "Cheffe opératrice", roleEn: "Cinematographer", rating: 5, order: 1 },
+      { name: "Junior Mbarga", roleFr: "Monteur", roleEn: "Editor", rating: 5, order: 2 },
+      { name: "Carine Fotso", roleFr: "Motion designer", roleEn: "Motion designer", rating: 5, order: 3 },
+    ],
+  });
+
   // --- FAQ ---
   await prisma.faqItem.deleteMany();
   await prisma.faqItem.createMany({

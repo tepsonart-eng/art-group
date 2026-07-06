@@ -46,3 +46,7 @@ export async function getCommitmentItems() {
 export async function getVisibleSocialLinks() {
   return prisma.socialLink.findMany({ where: { visible: true } });
 }
+
+export async function getTeamMembers() {
+  return prisma.teamMember.findMany({ orderBy: { order: "asc" } });
+}

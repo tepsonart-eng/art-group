@@ -63,6 +63,10 @@ const fr = {
     errorNotice: "Une erreur est survenue, merci de réessayer.",
     verified: "Client vérifié",
   },
+  team: {
+    titleAccent: "Notre",
+    titleBold: "équipe",
+  },
   cta: {
     titleAccent: "Vous avez un projet ?",
     titleBold: "Discutons-en.",
