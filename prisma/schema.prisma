@@ -252,6 +252,7 @@ model Training {
   resources       TrainingResource[]
   faqItems        TrainingFaqItem[]
   comments        TrainingComment[]
+  lessonProgress  LessonProgress[]
 }
 
 model TrainingLesson {
@@ -267,6 +268,7 @@ model TrainingLesson {
   vimeoUrl        String?
   externalUrl     String?
   durationMinutes Int             @default(0)
+  progress        LessonProgress[]
 }
 
 model TrainingResource {
@@ -302,17 +304,33 @@ model TrainingComment {
   createdAt   DateTime     @default(now())
 }
 
+model LessonProgress {
+  id            String         @id @default(cuid())
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId        String
+  lesson        TrainingLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lessonId      String
+  training      Training       @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId    String
+  completed     Boolean        @default(false)
+  completedAt   DateTime?
+  lastWatchedAt DateTime       @default(now())
+
+  @@unique([userId, lessonId])
+}
+
 model User {
-  id              String        @id @default(cuid())
+  id              String           @id @default(cuid())
   name            String
-  email           String        @unique
+  email           String           @unique
   passwordHash    String
   emailVerifiedAt DateTime?
   avatarPath      String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
   sessions        UserSession[]
   tokens          UserToken[]
+  lessonProgress  LessonProgress[]
 }
 
 model UserSession {

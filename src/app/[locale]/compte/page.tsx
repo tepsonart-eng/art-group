@@ -4,6 +4,7 @@ import { requireUser } from "@/lib/user-auth";
 import { logout } from "@/actions/user-auth";
 import { getDictionary } from "@/lib/i18n";
 import { ProfileForm } from "@/components/account/profile-form";
+import { MyTrainings } from "@/components/account/my-trainings";
 
 export default async function AccountPage({
   params,
@@ -31,6 +32,16 @@ export default async function AccountPage({
             {dict.account.verificationPendingBadge}
           </span>
         )}
+      </div>
+
+      <div className="mt-6">
+        <MyTrainings
+          userId={user.id}
+          locale={locale}
+          title={dict.account.myTrainingsTitle}
+          emptyText={dict.account.noTrainingsYet}
+          resumeLabel={dict.trainings.resumeButton}
+        />
       </div>
 
       <div className="mt-6">

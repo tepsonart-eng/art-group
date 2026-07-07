@@ -104,10 +104,12 @@ const en: Dictionary = {
     saving: "Saving...",
     logoutButton: "Log out",
     futurePhasesNotice:
-      "Your enrolled trainings, purchases and certificates will appear here as upcoming features are released.",
+      "Your purchases and certificates will appear here as upcoming features are released.",
     alreadyHaveAccount: "Already have an account?",
     noAccountYet: "Don't have an account yet?",
     memberSince: "Member since",
+    myTrainingsTitle: "My trainings",
+    noTrainingsYet: "You haven't started any training yet.",
   },
   trainings: {
     titleAccent: "Our",
@@ -132,6 +134,10 @@ const en: Dictionary = {
     commentSubmit: "Post",
     commentPendingNotice: "Thank you! Your comment will be visible after approval by our team.",
     empty: "No training in this category yet.",
+    completedLabel: "completed",
+    markComplete: "Mark as complete",
+    markIncomplete: "Mark as incomplete",
+    resumeButton: "Resume",
   },
   cta: {
     titleAccent: "Got a project?",

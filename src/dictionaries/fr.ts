@@ -102,10 +102,12 @@ const fr = {
     saving: "Enregistrement...",
     logoutButton: "Se déconnecter",
     futurePhasesNotice:
-      "Vos formations suivies, achats et certificats apparaîtront ici au fur et à mesure du déploiement des prochaines fonctionnalités.",
+      "Vos achats et certificats apparaîtront ici au fur et à mesure du déploiement des prochaines fonctionnalités.",
     alreadyHaveAccount: "Vous avez déjà un compte ?",
     noAccountYet: "Pas encore de compte ?",
     memberSince: "Membre depuis",
+    myTrainingsTitle: "Mes formations",
+    noTrainingsYet: "Vous n'avez pas encore commencé de formation.",
   },
   trainings: {
     titleAccent: "Nos",
@@ -130,6 +132,10 @@ const fr = {
     commentSubmit: "Publier",
     commentPendingNotice: "Merci ! Votre commentaire sera visible après validation par notre équipe.",
     empty: "Aucune formation dans cette catégorie pour le moment.",
+    completedLabel: "terminées",
+    markComplete: "Marquer comme terminée",
+    markIncomplete: "Marquer comme non terminée",
+    resumeButton: "Reprendre",
   },
   cta: {
     titleAccent: "Vous avez un projet ?",

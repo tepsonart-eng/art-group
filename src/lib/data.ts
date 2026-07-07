@@ -75,3 +75,40 @@ export async function getTrainingBySlug(slug: string) {
     },
   });
 }
+
+export async function getLessonProgressMap(userId: string, trainingId: string) {
+  const rows = await prisma.lessonProgress.findMany({ where: { userId, trainingId } });
+  const map: Record<string, { completed: boolean; lastWatchedAt: Date }> = {};
+  for (const row of rows) {
+    map[row.lessonId] = { completed: row.completed, lastWatchedAt: row.lastWatchedAt };
+  }
+  return map;
+}
+
+export async function getUserTrainingsProgress(userId: string) {
+  const progressRows = await prisma.lessonProgress.findMany({ where: { userId } });
+  if (progressRows.length === 0) return [];
+
+  const trainingIds = Array.from(new Set(progressRows.map((r) => r.trainingId)));
+  const trainings = await prisma.training.findMany({
+    where: { id: { in: trainingIds } },
+    include: { lessons: true },
+  });
+
+  return trainingIds
+    .map((trainingId) => {
+      const training = trainings.find((t) => t.id === trainingId);
+      if (!training) return null;
+      const rowsForTraining = progressRows.filter((r) => r.trainingId === trainingId);
+      const completedCount = rowsForTraining.filter((r) => r.completed).length;
+      const totalLessons = training.lessons.length;
+      const percent = totalLessons > 0 ? Math.round((completedCount / totalLessons) * 100) : 0;
+      const lastWatchedAt = rowsForTraining.reduce(
+        (latest, r) => (r.lastWatchedAt > latest ? r.lastWatchedAt : latest),
+        rowsForTraining[0].lastWatchedAt
+      );
+      return { training, percent, completedCount, totalLessons, lastWatchedAt };
+    })
+    .filter((x): x is NonNullable<typeof x> => x !== null)
+    .sort((a, b) => b.lastWatchedAt.getTime() - a.lastWatchedAt.getTime());
+}

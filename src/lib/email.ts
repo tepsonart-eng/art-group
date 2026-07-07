@@ -17,12 +17,15 @@ export async function sendEmail({
 
   try {
     const resend = new Resend(apiKey);
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL || "TEPSON ART GROUP <no-reply@tepsonartgroup.com>",
       to,
       subject,
       html,
     });
+    if (error) {
+      console.error("[email] Resend rejected the send:", error);
+    }
   } catch (err) {
     console.error("[email] send failed:", err);
   }

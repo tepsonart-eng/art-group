@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Clock, Eye, BarChart3 } from "lucide-react";
 import { isValidLocale, type Locale } from "@/lib/i18n";
-import { getTrainingBySlug } from "@/lib/data";
+import { getTrainingBySlug, getLessonProgressMap } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/user-auth";
 import { FaqAccordion } from "@/components/faq-accordion";
-import { TrainingVideoPlayer } from "@/components/trainings/training-video-player";
 import { TrainingLessonList } from "@/components/trainings/training-lesson-list";
 import { TrainingResourceList } from "@/components/trainings/training-resource-list";
 import { TrainingComments } from "@/components/trainings/training-comments";
@@ -57,6 +57,15 @@ export default async function TrainingDetailPage({
     .update({ where: { id: training.id }, data: { viewCount: { increment: 1 } } })
     .catch(() => {});
 
+  const currentUser = await getCurrentUser();
+  const progress = currentUser ? await getLessonProgressMap(currentUser.id, training.id) : undefined;
+  const initialLessonId = progress
+    ? Object.entries(progress).sort((a, b) => b[1].lastWatchedAt.getTime() - a[1].lastWatchedAt.getTime())[0]?.[0]
+    : undefined;
+  const progressForList = progress
+    ? Object.fromEntries(Object.entries(progress).map(([id, p]) => [id, { completed: p.completed }]))
+    : undefined;
+
   const title = locale === "fr" ? training.titleFr : training.titleEn;
   const presentation = locale === "fr" ? training.presentationFr : training.presentationEn;
   const objectives = locale === "fr" ? training.objectivesFr : training.objectivesEn;
@@ -88,13 +97,13 @@ export default async function TrainingDetailPage({
       </div>
 
       <div className="mt-8">
-        {training.lessons.length > 1 ? (
-          <TrainingLessonList lessons={training.lessons} title={title} />
-        ) : training.lessons[0] ? (
-          <div className="aspect-video w-full overflow-hidden rounded-xl bg-black">
-            <TrainingVideoPlayer lesson={training.lessons[0]} title={title} />
-          </div>
-        ) : null}
+        <TrainingLessonList
+          lessons={training.lessons}
+          title={title}
+          trainingId={training.id}
+          progress={progressForList}
+          initialLessonId={initialLessonId}
+        />
       </div>
 
       {presentation && (
