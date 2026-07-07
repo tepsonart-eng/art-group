@@ -38,6 +38,19 @@ enum Palette {
   COBALT_GOLD
 }
 
+enum VideoSourceType {
+  UPLOAD
+  YOUTUBE
+  VIMEO
+  EXTERNAL
+}
+
+enum TrainingLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
 model AdminUser {
   id           String    @id @default(cuid())
   name         String
@@ -198,6 +211,90 @@ model TeamMember {
   photoPath String?
   rating    Int     @default(5)
   order     Int     @default(0)
+}
+
+model TrainingCategory {
+  id        String     @id @default(cuid())
+  slug      String     @unique
+  nameFr    String
+  nameEn    String
+  order     Int        @default(0)
+  trainings Training[]
+}
+
+model Training {
+  id              String             @id @default(cuid())
+  slug            String             @unique
+  category        TrainingCategory   @relation(fields: [categoryId], references: [id])
+  categoryId      String
+  titleFr         String
+  titleEn         String
+  shortDescFr     String             @default("")
+  shortDescEn     String             @default("")
+  presentationFr  String             @default("")
+  presentationEn  String             @default("")
+  objectivesFr    String             @default("")
+  objectivesEn    String             @default("")
+  level           TrainingLevel      @default(BEGINNER)
+  durationMinutes Int                @default(0)
+  thumbnailPath   String?
+  viewCount       Int                @default(0)
+  order           Int                @default(0)
+  published       Boolean            @default(true)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  lessons         TrainingLesson[]
+  resources       TrainingResource[]
+  faqItems        TrainingFaqItem[]
+  comments        TrainingComment[]
+}
+
+model TrainingLesson {
+  id              String          @id @default(cuid())
+  training        Training        @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId      String
+  titleFr         String
+  titleEn         String
+  order           Int             @default(0)
+  videoSourceType VideoSourceType @default(UPLOAD)
+  videoFilePath   String?
+  youtubeUrl      String?
+  vimeoUrl        String?
+  externalUrl     String?
+  durationMinutes Int             @default(0)
+}
+
+model TrainingResource {
+  id         String   @id @default(cuid())
+  training   Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId String
+  titleFr    String
+  titleEn    String
+  filePath   String
+  order      Int      @default(0)
+}
+
+model TrainingFaqItem {
+  id         String   @id @default(cuid())
+  training   Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId String
+  questionFr String
+  questionEn String
+  answerFr   String
+  answerEn   String
+  order      Int      @default(0)
+}
+
+model TrainingComment {
+  id          String       @id @default(cuid())
+  training    Training     @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId  String
+  authorName  String
+  authorEmail String
+  comment     String
+  status      ReviewStatus @default(PENDING)
+  ipAddress   String       @default("")
+  createdAt   DateTime     @default(now())
 }
 
 model SiteSetting {

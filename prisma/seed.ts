@@ -441,6 +441,22 @@ async function main() {
     ],
   });
 
+  // --- Training categories (Formations & Tutoriels) ---
+  await prisma.trainingCategory.deleteMany();
+  await prisma.trainingCategory.createMany({
+    data: [
+      { slug: "djing", nameFr: "DJing", nameEn: "DJing", order: 0 },
+      { slug: "production-musicale", nameFr: "Production musicale", nameEn: "Music production", order: 1 },
+      { slug: "audiovisuel", nameFr: "Audiovisuel", nameEn: "Audiovisual", order: 2 },
+      { slug: "evenementiel", nameFr: "Événementiel", nameEn: "Event management", order: 3 },
+      { slug: "marketing-digital", nameFr: "Marketing digital", nameEn: "Digital marketing", order: 4 },
+      { slug: "entrepreneuriat", nameFr: "Entrepreneuriat", nameEn: "Entrepreneurship", order: 5 },
+      { slug: "creation-de-contenu", nameFr: "Création de contenu", nameEn: "Content creation", order: 6 },
+      { slug: "design-graphique", nameFr: "Design graphique", nameEn: "Graphic design", order: 7 },
+      { slug: "autres", nameFr: "Autres", nameEn: "Other", order: 8 },
+    ],
+  });
+
   console.log("Seed terminé.");
   console.log(`Compte admin : ${ADMIN_EMAIL} / mot de passe : ${ADMIN_PASSWORD}`);
 }

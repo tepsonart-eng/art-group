@@ -45,14 +45,19 @@ const SITE_ASSET_EXTENSIONS: Record<string, string[]> = {
   video: [".mp4", ".webm"],
   document: [".pdf"],
 };
-const SITE_ASSET_MAX_SIZE = 40 * 1024 * 1024;
+const SITE_ASSET_MAX_SIZE: Record<"image" | "video" | "document", number> = {
+  image: 15 * 1024 * 1024,
+  video: 40 * 1024 * 1024,
+  document: 60 * 1024 * 1024,
+};
 
 export async function saveSiteAsset(
   file: File,
   kind: "image" | "video" | "document"
 ): Promise<string> {
-  if (file.size > SITE_ASSET_MAX_SIZE) {
-    throw new UploadError("Le fichier dépasse la taille maximale autorisée (40 Mo).");
+  if (file.size > SITE_ASSET_MAX_SIZE[kind]) {
+    const maxMb = SITE_ASSET_MAX_SIZE[kind] / (1024 * 1024);
+    throw new UploadError(`Le fichier dépasse la taille maximale autorisée (${maxMb} Mo).`);
   }
   const ext = path.extname(file.name).toLowerCase();
   if (!SITE_ASSET_EXTENSIONS[kind].includes(ext)) {

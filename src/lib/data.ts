@@ -50,3 +50,28 @@ export async function getVisibleSocialLinks() {
 export async function getTeamMembers() {
   return prisma.teamMember.findMany({ orderBy: { order: "asc" } });
 }
+
+export async function getTrainingCategories() {
+  return prisma.trainingCategory.findMany({ orderBy: { order: "asc" } });
+}
+
+export async function getTrainings() {
+  return prisma.training.findMany({
+    where: { published: true },
+    orderBy: { order: "asc" },
+    include: { category: true, lessons: { orderBy: { order: "asc" } } },
+  });
+}
+
+export async function getTrainingBySlug(slug: string) {
+  return prisma.training.findUnique({
+    where: { slug },
+    include: {
+      category: true,
+      lessons: { orderBy: { order: "asc" } },
+      resources: { orderBy: { order: "asc" } },
+      faqItems: { orderBy: { order: "asc" } },
+      comments: { where: { status: "APPROVED" }, orderBy: { createdAt: "desc" } },
+    },
+  });
+}
