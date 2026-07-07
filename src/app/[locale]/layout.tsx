@@ -3,6 +3,7 @@ import { isValidLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/lib/i18n";
 import { getSiteSettings } from "@/lib/settings";
 import { getFaqItems, getCommitmentItems, getVisibleSocialLinks, getProjects, getTrainings } from "@/lib/data";
+import { getCurrentUser } from "@/lib/user-auth";
 import { DictionaryProvider } from "@/components/dictionary-provider";
 import { AboutModalProvider } from "@/components/about-modal-provider";
 import { HtmlLangSync } from "@/components/html-lang-sync";
@@ -24,7 +25,7 @@ export default async function LocaleLayout({
   if (!isValidLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
 
-  const [dict, settings, faqItems, commitments, socialLinks, projects, trainings] = await Promise.all([
+  const [dict, settings, faqItems, commitments, socialLinks, projects, trainings, currentUser] = await Promise.all([
     getDictionary(locale),
     getSiteSettings(),
     getFaqItems(),
@@ -32,6 +33,7 @@ export default async function LocaleLayout({
     getVisibleSocialLinks(),
     getProjects(),
     getTrainings(),
+    getCurrentUser(),
   ]);
 
   const searchEntries: SearchEntry[] = [
@@ -66,6 +68,7 @@ export default async function LocaleLayout({
             logoLightPath={settings.logoLightPath}
             logoDarkPath={settings.logoDarkPath}
             searchEntries={searchEntries}
+            currentUser={currentUser}
           />
           <main className="flex-1">{children}</main>
           <Footer

@@ -4,22 +4,25 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useTheme } from "next-themes";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 import { LogoLockup } from "@/components/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { SearchOverlay, type SearchEntry } from "@/components/search-overlay";
 import { useDictionary } from "@/components/dictionary-provider";
 import type { Locale } from "@/lib/i18n";
+import type { CurrentUser } from "@/lib/user-auth";
 
 export function Header({
   logoLightPath,
   logoDarkPath,
   searchEntries,
+  currentUser,
 }: {
   logoLightPath?: string | null;
   logoDarkPath?: string | null;
   searchEntries: SearchEntry[];
+  currentUser: CurrentUser | null;
 }) {
   const { dict, locale } = useDictionary();
   const { resolvedTheme } = useTheme();
@@ -97,6 +100,15 @@ export function Header({
           </div>
           <LanguageSwitcher locale={locale as Locale} light={overDarkBackground} />
           <ThemeToggle light={overDarkBackground} />
+          <Link
+            href={currentUser ? `/${locale}/compte` : `/${locale}/compte/connexion`}
+            aria-label={dict.account.navLabel}
+            className={`flex h-9 w-9 items-center justify-center rounded-full border ${
+              overDarkBackground ? "border-white/40 text-white" : "border-line text-text"
+            }`}
+          >
+            <User size={16} />
+          </Link>
           <button
             type="button"
             className={`ml-1 flex h-9 w-9 items-center justify-center rounded-full border lg:hidden ${

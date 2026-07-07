@@ -51,6 +51,11 @@ enum TrainingLevel {
   ADVANCED
 }
 
+enum UserTokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+}
+
 model AdminUser {
   id           String    @id @default(cuid())
   name         String
@@ -295,6 +300,39 @@ model TrainingComment {
   status      ReviewStatus @default(PENDING)
   ipAddress   String       @default("")
   createdAt   DateTime     @default(now())
+}
+
+model User {
+  id              String        @id @default(cuid())
+  name            String
+  email           String        @unique
+  passwordHash    String
+  emailVerifiedAt DateTime?
+  avatarPath      String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  sessions        UserSession[]
+  tokens          UserToken[]
+}
+
+model UserSession {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model UserToken {
+  id         String        @id @default(cuid())
+  token      String        @unique
+  type       UserTokenType
+  user       User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime      @default(now())
 }
 
 model SiteSetting {
