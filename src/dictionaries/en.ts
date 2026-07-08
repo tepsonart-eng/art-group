@@ -151,6 +151,13 @@ const en: Dictionary = {
     empty: "No resources in this category yet.",
     downloadButton: "Download",
   },
+  shop: {
+    navLabel: "Shop",
+    titleBold: "shop",
+    allCategoriesTab: "All",
+    empty: "No products in this category yet.",
+    buyButton: "Buy",
+  },
   certificates: {
     verifyTitle: "Verify a certificate",
     codeLabel: "Certificate number",
@@ -163,6 +170,7 @@ const en: Dictionary = {
   },
   checkout: {
     premiumTitle: "Premium training",
+    productTitle: "Digital product",
     channelLabel: "Payment method",
     phoneLabel: "Mobile Money number",
     submit: "Pay now",

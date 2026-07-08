@@ -16,7 +16,7 @@ const channelLabel: Record<string, string> = {
 export default async function AdminOrdersPage() {
   const orders = await prisma.order.findMany({
     orderBy: { createdAt: "desc" },
-    include: { user: true, training: true },
+    include: { user: true, training: true, product: true },
     take: 200,
   });
 
@@ -28,7 +28,7 @@ export default async function AdminOrdersPage() {
     <div>
       <h1 className="font-display text-2xl font-bold">Commandes</h1>
       <p className="mt-1 text-sm text-text-muted">
-        Historique des achats de formations premium (Orange Money / MTN MoMo).
+        Historique des achats de formations premium et de produits de la boutique (Orange Money / MTN MoMo).
       </p>
 
       <div className="mt-6 rounded-xl bg-surface-alt p-4">
@@ -46,7 +46,8 @@ export default async function AdminOrdersPage() {
             <tr className="border-b border-line text-xs uppercase tracking-wide text-text-muted">
               <th className="py-2 pr-4">Date</th>
               <th className="py-2 pr-4">Client</th>
-              <th className="py-2 pr-4">Formation</th>
+              <th className="py-2 pr-4">Type</th>
+              <th className="py-2 pr-4">Article</th>
               <th className="py-2 pr-4">Canal</th>
               <th className="py-2 pr-4">Montant</th>
               <th className="py-2 pr-4">Statut</th>
@@ -61,7 +62,8 @@ export default async function AdminOrdersPage() {
                 <td className="py-2 pr-4">
                   {order.user.name} <span className="text-text-muted">({order.user.email})</span>
                 </td>
-                <td className="py-2 pr-4">{order.training.titleFr}</td>
+                <td className="py-2 pr-4 text-text-muted">{order.training ? "Formation" : "Produit"}</td>
+                <td className="py-2 pr-4">{order.training?.titleFr ?? order.product?.titleFr ?? "—"}</td>
                 <td className="py-2 pr-4">{channelLabel[order.channel]}</td>
                 <td className="py-2 pr-4">{order.amountXaf.toLocaleString("fr-FR")} FCFA</td>
                 <td className="py-2 pr-4">

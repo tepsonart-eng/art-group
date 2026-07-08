@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const tsquery = buildTsQuery(q);
     if (!tsquery) return NextResponse.json({ results: [] });
 
-    const [dict, trainings, resources, projects, faqs] = await Promise.all([
+    const [dict, trainings, resources, products, projects, faqs] = await Promise.all([
       getDictionary(locale),
       prisma.$queryRaw<SearchRow[]>`
         SELECT
@@ -54,6 +54,22 @@ export async function GET(request: NextRequest) {
             to_tsquery(${config}::regconfig, ${tsquery})
           ) AS rank
         FROM "Resource"
+        WHERE published = true
+          AND to_tsvector(${config}::regconfig, CASE WHEN ${locale} = 'fr' THEN "titleFr" || ' ' || "descriptionFr" ELSE "titleEn" || ' ' || "descriptionEn" END)
+              @@ to_tsquery(${config}::regconfig, ${tsquery})
+        ORDER BY rank DESC
+        LIMIT 6
+      `,
+      prisma.$queryRaw<SearchRow[]>`
+        SELECT
+          CASE WHEN ${locale} = 'fr' THEN "titleFr" ELSE "titleEn" END AS label,
+          ('/' || ${locale} || '/boutique/' || slug) AS href,
+          'shop' AS "groupKey",
+          ts_rank(
+            to_tsvector(${config}::regconfig, CASE WHEN ${locale} = 'fr' THEN "titleFr" || ' ' || "descriptionFr" ELSE "titleEn" || ' ' || "descriptionEn" END),
+            to_tsquery(${config}::regconfig, ${tsquery})
+          ) AS rank
+        FROM "Product"
         WHERE published = true
           AND to_tsvector(${config}::regconfig, CASE WHEN ${locale} = 'fr' THEN "titleFr" || ' ' || "descriptionFr" ELSE "titleEn" || ' ' || "descriptionEn" END)
               @@ to_tsquery(${config}::regconfig, ${tsquery})
@@ -96,11 +112,12 @@ export async function GET(request: NextRequest) {
     const groupLabels: Record<string, string> = {
       trainings: dict.trainings.titleBold,
       resources: dict.resources.titleBold,
+      shop: dict.shop.titleBold,
       projects: dict.portfolio.titleBold,
       faq: dict.about.faqTitle,
     };
 
-    const results = [...trainings, ...resources, ...projects, ...faqs]
+    const results = [...trainings, ...resources, ...products, ...projects, ...faqs]
       .sort((a, b) => b.rank - a.rank)
       .slice(0, 8)
       .map((r) => ({ label: r.label, href: r.href, group: groupLabels[r.groupKey] ?? r.groupKey }));

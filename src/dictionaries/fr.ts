@@ -149,6 +149,13 @@ const fr = {
     empty: "Aucune ressource dans cette catégorie pour le moment.",
     downloadButton: "Télécharger",
   },
+  shop: {
+    navLabel: "Boutique",
+    titleBold: "boutique",
+    allCategoriesTab: "Tout",
+    empty: "Aucun produit dans cette catégorie pour le moment.",
+    buyButton: "Acheter",
+  },
   certificates: {
     verifyTitle: "Vérifier un certificat",
     codeLabel: "Numéro de certificat",
@@ -161,6 +168,7 @@ const fr = {
   },
   checkout: {
     premiumTitle: "Formation premium",
+    productTitle: "Produit numérique",
     channelLabel: "Moyen de paiement",
     phoneLabel: "Numéro Mobile Money",
     submit: "Payer maintenant",

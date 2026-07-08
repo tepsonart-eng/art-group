@@ -43,7 +43,7 @@ export async function saveContactAttachment(file: File): Promise<string | null> 
 const SITE_ASSET_EXTENSIONS: Record<string, string[]> = {
   image: [".png", ".jpg", ".jpeg", ".webp", ".svg"],
   video: [".mp4", ".webm"],
-  document: [".pdf"],
+  document: [".pdf", ".zip"],
 };
 const SITE_ASSET_MAX_SIZE: Record<"image" | "video" | "document", number> = {
   image: 15 * 1024 * 1024,

@@ -10,12 +10,14 @@ const POLL_INTERVAL_MS = 3000;
 const POLL_TIMEOUT_MS = 2 * 60 * 1000;
 
 export function PurchasePanel({
-  trainingId,
+  kind,
+  id,
   priceXaf,
   locale,
   loggedIn,
 }: {
-  trainingId: string;
+  kind: "training" | "product";
+  id: string;
   priceXaf: number;
   locale: string;
   loggedIn: boolean;
@@ -96,7 +98,9 @@ export function PurchasePanel({
     <div className="rounded-xl bg-surface-alt p-6 sm:p-8">
       <div className="flex items-center gap-2">
         <Lock size={18} className="text-accent" />
-        <p className="font-display font-bold">{dict.checkout.premiumTitle}</p>
+        <p className="font-display font-bold">
+          {kind === "training" ? dict.checkout.premiumTitle : dict.checkout.productTitle}
+        </p>
       </div>
       <p className="mt-2 text-2xl font-display font-extrabold text-accent">
         {priceXaf.toLocaleString(locale === "fr" ? "fr-FR" : "en-US")} FCFA
@@ -104,7 +108,7 @@ export function PurchasePanel({
 
       <form action={formAction} className="mt-5 space-y-4">
         <input type="hidden" name="locale" value={locale} />
-        <input type="hidden" name="trainingId" value={trainingId} />
+        <input type="hidden" name={kind === "training" ? "trainingId" : "productId"} value={id} />
         <div>
           <label className="mb-1 block text-xs font-display font-semibold uppercase tracking-wide text-text-muted">
             {dict.checkout.channelLabel}

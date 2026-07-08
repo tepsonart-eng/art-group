@@ -15,7 +15,8 @@ export type CheckoutFormState = {
 };
 
 const purchaseSchema = z.object({
-  trainingId: z.string().min(1),
+  trainingId: z.string().optional(),
+  productId: z.string().optional(),
   phoneNumber: z.string().trim().regex(/^6\d{8}$/, "Numéro invalide (9 chiffres commençant par 6)."),
   channel: z.enum(["ORANGE_MONEY", "MTN_MOMO"]),
 });
@@ -28,24 +29,51 @@ export async function initiatePurchase(
   const user = await requireUser(locale);
 
   const parsed = purchaseSchema.safeParse({
-    trainingId: formData.get("trainingId"),
+    trainingId: formData.get("trainingId") || undefined,
+    productId: formData.get("productId") || undefined,
     phoneNumber: formData.get("phoneNumber"),
     channel: formData.get("channel"),
   });
   if (!parsed.success) {
     return { status: "error", message: parsed.error.issues[0]?.message || "Formulaire invalide." };
   }
-
-  const training = await prisma.training.findUnique({ where: { id: parsed.data.trainingId } });
-  if (!training || !training.isPremium || training.priceXaf <= 0) {
-    return { status: "error", message: "Cette formation n'est pas disponible à l'achat." };
+  const { trainingId, productId } = parsed.data;
+  if ((!trainingId && !productId) || (trainingId && productId)) {
+    return { status: "error", message: "Formulaire invalide." };
   }
 
-  const existing = await prisma.order.findFirst({
-    where: { userId: user.id, trainingId: training.id, status: "PAID" },
-  });
-  if (existing) {
-    return { status: "error", message: "Vous avez déjà accès à cette formation." };
+  let amountXaf: number;
+  let description: string;
+  let orderData: { trainingId?: string; productId?: string };
+
+  if (trainingId) {
+    const training = await prisma.training.findUnique({ where: { id: trainingId } });
+    if (!training || !training.isPremium || training.priceXaf <= 0) {
+      return { status: "error", message: "Cette formation n'est pas disponible à l'achat." };
+    }
+    const existing = await prisma.order.findFirst({
+      where: { userId: user.id, trainingId: training.id, status: "PAID" },
+    });
+    if (existing) {
+      return { status: "error", message: "Vous avez déjà accès à cette formation." };
+    }
+    amountXaf = training.priceXaf;
+    description = `Formation : ${training.titleFr}`;
+    orderData = { trainingId: training.id };
+  } else {
+    const product = await prisma.product.findUnique({ where: { id: productId! } });
+    if (!product || !product.published || product.priceXaf <= 0) {
+      return { status: "error", message: "Ce produit n'est pas disponible à l'achat." };
+    }
+    const existing = await prisma.order.findFirst({
+      where: { userId: user.id, productId: product.id, status: "PAID" },
+    });
+    if (existing) {
+      return { status: "error", message: "Vous avez déjà acheté ce produit." };
+    }
+    amountXaf = product.priceXaf;
+    description = `Produit : ${product.titleFr}`;
+    orderData = { productId: product.id };
   }
 
   const internalReference = `tag-${crypto.randomBytes(8).toString("hex")}`;
@@ -53,19 +81,19 @@ export async function initiatePurchase(
 
   try {
     const init = await initializePayment({
-      amountXaf: training.priceXaf,
+      amountXaf,
       email: user.email,
       phone,
       name: user.name,
       reference: internalReference,
-      description: `Formation : ${training.titleFr}`,
+      description,
     });
 
     const order = await prisma.order.create({
       data: {
         userId: user.id,
-        trainingId: training.id,
-        amountXaf: training.priceXaf,
+        ...orderData,
+        amountXaf,
         channel: parsed.data.channel,
         phoneNumber: phone,
         notchpayReference: init.transaction,

@@ -1,3 +1,4 @@
+import { Download } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { getUserOrders } from "@/lib/data";
 
@@ -29,30 +30,41 @@ export async function MyOrders({
         <p className="mt-3 text-sm text-text-muted">{emptyText}</p>
       ) : (
         <div className="mt-4 space-y-3">
-          {orders.map((order) => (
-            <div key={order.id} className="flex items-center gap-4 rounded-xl bg-surface-alt p-4">
-              <div className="min-w-0 flex-1">
-                <p className="truncate font-display text-sm font-semibold">
-                  {locale === "fr" ? order.training.titleFr : order.training.titleEn}
-                </p>
-                <p className="text-xs text-text-muted">
-                  {order.createdAt.toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US")} ·{" "}
-                  {order.amountXaf.toLocaleString(locale === "fr" ? "fr-FR" : "en-US")} FCFA
-                </p>
+          {orders.map((order) => {
+            const item = order.training ?? order.product;
+            const itemTitle = item ? (locale === "fr" ? item.titleFr : item.titleEn) : "—";
+            return (
+              <div key={order.id} className="flex items-center gap-4 rounded-xl bg-surface-alt p-4">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-display text-sm font-semibold">{itemTitle}</p>
+                  <p className="text-xs text-text-muted">
+                    {order.createdAt.toLocaleDateString(locale === "fr" ? "fr-FR" : "en-US")} ·{" "}
+                    {order.amountXaf.toLocaleString(locale === "fr" ? "fr-FR" : "en-US")} FCFA
+                  </p>
+                </div>
+                {order.status === "PAID" && order.productId && (
+                  <a
+                    href={`/api/products/${order.productId}/download`}
+                    className="shrink-0 text-accent hover:text-accent-dark"
+                    aria-label={locale === "fr" ? "Télécharger" : "Download"}
+                  >
+                    <Download size={16} />
+                  </a>
+                )}
+                <span
+                  className={`shrink-0 text-xs font-semibold ${
+                    order.status === "PAID"
+                      ? "text-green-600 dark:text-green-400"
+                      : order.status === "PENDING"
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-red-600 dark:text-red-400"
+                  }`}
+                >
+                  {statusLabel[order.status][locale]}
+                </span>
               </div>
-              <span
-                className={`shrink-0 text-xs font-semibold ${
-                  order.status === "PAID"
-                    ? "text-green-600 dark:text-green-400"
-                    : order.status === "PENDING"
-                      ? "text-amber-600 dark:text-amber-400"
-                      : "text-red-600 dark:text-red-400"
-                }`}
-              >
-                {statusLabel[order.status][locale]}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

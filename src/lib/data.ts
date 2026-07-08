@@ -63,6 +63,21 @@ export async function getResources() {
   });
 }
 
+export async function getProducts() {
+  return prisma.product.findMany({
+    where: { published: true },
+    orderBy: { order: "asc" },
+    include: { category: true },
+  });
+}
+
+export async function getProductBySlug(slug: string) {
+  return prisma.product.findUnique({
+    where: { slug },
+    include: { category: true },
+  });
+}
+
 export async function getTrainings() {
   return prisma.training.findMany({
     where: { published: true },
@@ -136,7 +151,7 @@ export async function getUserCertificates(userId: string) {
 export async function getUserOrders(userId: string) {
   return prisma.order.findMany({
     where: { userId },
-    include: { training: true },
+    include: { training: true, product: true },
     orderBy: { createdAt: "desc" },
   });
 }

@@ -13,3 +13,13 @@ export async function hasAccessToTraining(
   });
   return order !== null;
 }
+
+export async function hasAccessToProduct(userId: string | null, productId: string): Promise<boolean> {
+  if (!userId) return false;
+
+  const order = await prisma.order.findFirst({
+    where: { userId, productId, status: "PAID" },
+    select: { id: true },
+  });
+  return order !== null;
+}

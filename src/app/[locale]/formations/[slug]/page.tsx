@@ -10,7 +10,7 @@ import { FaqAccordion } from "@/components/faq-accordion";
 import { TrainingLessonList } from "@/components/trainings/training-lesson-list";
 import { TrainingResourceList } from "@/components/trainings/training-resource-list";
 import { TrainingComments } from "@/components/trainings/training-comments";
-import { PurchasePanel } from "@/components/trainings/purchase-panel";
+import { PurchasePanel } from "@/components/checkout/purchase-panel";
 
 const levelLabel: Record<string, { fr: string; en: string }> = {
   BEGINNER: { fr: "Débutant", en: "Beginner" },
@@ -110,7 +110,8 @@ export default async function TrainingDetailPage({
           />
         ) : (
           <PurchasePanel
-            trainingId={training.id}
+            kind="training"
+            id={training.id}
             priceXaf={training.priceXaf}
             locale={locale}
             loggedIn={Boolean(currentUser)}
