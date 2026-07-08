@@ -5,7 +5,8 @@ const fr = {
     agency: "Agence",
     contact: "Contact",
     search: "Rechercher",
-    searchPlaceholder: "Rechercher un projet, une question...",
+    searchPlaceholder: "Rechercher une formation, une ressource, un projet...",
+    searchNoResults: "Aucun résultat.",
   },
   hero: {
     overline: "Agence de production audiovisuelle",

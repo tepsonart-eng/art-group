@@ -7,7 +7,8 @@ const en: Dictionary = {
     agency: "Agency",
     contact: "Contact",
     search: "Search",
-    searchPlaceholder: "Search a project, a question...",
+    searchPlaceholder: "Search a training, a resource, a project...",
+    searchNoResults: "No results.",
   },
   hero: {
     overline: "Audiovisual production agency",

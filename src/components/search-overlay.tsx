@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import { useDictionary } from "@/components/dictionary-provider";
 
@@ -10,15 +10,49 @@ export type SearchEntry = {
   group: string;
 };
 
-export function SearchOverlay({ entries, light = false }: { entries: SearchEntry[]; light?: boolean }) {
-  const { dict } = useDictionary();
+export function SearchOverlay({ light = false }: { light?: boolean }) {
+  const { dict, locale } = useDictionary();
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [results, setResults] = useState<SearchEntry[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
 
-  const results =
-    query.trim().length > 0
-      ? entries.filter((e) => e.label.toLowerCase().includes(query.trim().toLowerCase())).slice(0, 8)
-      : [];
+  useEffect(() => {
+    const trimmed = query.trim();
+    if (trimmed.length === 0) {
+      setResults([]);
+      setLoading(false);
+      setSearched(false);
+      return;
+    }
+
+    const controller = new AbortController();
+    setLoading(true);
+    const timer = setTimeout(() => {
+      fetch(`/api/search?q=${encodeURIComponent(trimmed)}&locale=${locale}`, {
+        signal: controller.signal,
+      })
+        .then((res) => res.json())
+        .then((data: { results: SearchEntry[] }) => {
+          setResults(data.results ?? []);
+          setLoading(false);
+          setSearched(true);
+        })
+        .catch(() => {
+          if (!controller.signal.aborted) {
+            setResults([]);
+            setLoading(false);
+            setSearched(true);
+          }
+        });
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, locale]);
 
   return (
     <>
@@ -71,6 +105,9 @@ export function SearchOverlay({ entries, light = false }: { entries: SearchEntry
                   </li>
                 ))}
               </ul>
+            )}
+            {!loading && searched && results.length === 0 && (
+              <p className="mt-3 px-3 py-2 text-sm text-text-muted">{dict.nav.searchNoResults}</p>
             )}
           </div>
         </div>

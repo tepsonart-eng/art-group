@@ -8,7 +8,7 @@ import { Menu, X, User } from "lucide-react";
 import { LogoLockup } from "@/components/logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { SearchOverlay, type SearchEntry } from "@/components/search-overlay";
+import { SearchOverlay } from "@/components/search-overlay";
 import { useDictionary } from "@/components/dictionary-provider";
 import type { Locale } from "@/lib/i18n";
 import type { CurrentUser } from "@/lib/user-auth";
@@ -16,12 +16,10 @@ import type { CurrentUser } from "@/lib/user-auth";
 export function Header({
   logoLightPath,
   logoDarkPath,
-  searchEntries,
   currentUser,
 }: {
   logoLightPath?: string | null;
   logoDarkPath?: string | null;
-  searchEntries: SearchEntry[];
   currentUser: CurrentUser | null;
 }) {
   const { dict, locale } = useDictionary();
@@ -97,7 +95,7 @@ export function Header({
 
         <div className="flex items-center gap-2">
           <div className="hidden sm:block">
-            <SearchOverlay entries={searchEntries} light={overDarkBackground} />
+            <SearchOverlay light={overDarkBackground} />
           </div>
           <LanguageSwitcher locale={locale as Locale} light={overDarkBackground} />
           <ThemeToggle light={overDarkBackground} />
