@@ -72,6 +72,8 @@ export async function upsertTraining(formData: FormData) {
     durationMinutes: num(formData, "durationMinutes"),
     order: num(formData, "order"),
     published: bool(formData, "published"),
+    isPremium: bool(formData, "isPremium"),
+    priceXaf: num(formData, "priceXaf"),
   };
 
   const thumbnail = formData.get("thumbnail");

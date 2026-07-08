@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Clock, Eye, BarChart3 } from "lucide-react";
+import { Clock, Eye, BarChart3, Lock } from "lucide-react";
 import { getYoutubeId } from "@/lib/youtube";
 import type { TrainingCardEntry } from "@/components/trainings/types";
 
@@ -55,6 +55,11 @@ export function TrainingCard({
         <span className="absolute left-3 top-3 z-10 rounded-full bg-white/90 px-3 py-1 text-[11px] font-display font-semibold uppercase tracking-wide text-ink">
           {categoryName}
         </span>
+        {training.isPremium && (
+          <span className="absolute right-3 top-3 z-10 flex items-center gap-1 rounded-full bg-accent px-3 py-1 text-[11px] font-display font-semibold uppercase tracking-wide text-white">
+            <Lock size={11} /> {training.priceXaf.toLocaleString(locale === "fr" ? "fr-FR" : "en-US")} FCFA
+          </span>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-5">

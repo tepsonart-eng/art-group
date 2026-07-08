@@ -5,10 +5,12 @@ import { isValidLocale, type Locale } from "@/lib/i18n";
 import { getTrainingBySlug, getLessonProgressMap } from "@/lib/data";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/user-auth";
+import { hasAccessToTraining } from "@/lib/access";
 import { FaqAccordion } from "@/components/faq-accordion";
 import { TrainingLessonList } from "@/components/trainings/training-lesson-list";
 import { TrainingResourceList } from "@/components/trainings/training-resource-list";
 import { TrainingComments } from "@/components/trainings/training-comments";
+import { PurchasePanel } from "@/components/trainings/purchase-panel";
 
 const levelLabel: Record<string, { fr: string; en: string }> = {
   BEGINNER: { fr: "Débutant", en: "Beginner" },
@@ -58,6 +60,7 @@ export default async function TrainingDetailPage({
     .catch(() => {});
 
   const currentUser = await getCurrentUser();
+  const canAccess = await hasAccessToTraining(currentUser?.id ?? null, training);
   const progress = currentUser ? await getLessonProgressMap(currentUser.id, training.id) : undefined;
   const initialLessonId = progress
     ? Object.entries(progress).sort((a, b) => b[1].lastWatchedAt.getTime() - a[1].lastWatchedAt.getTime())[0]?.[0]
@@ -97,13 +100,22 @@ export default async function TrainingDetailPage({
       </div>
 
       <div className="mt-8">
-        <TrainingLessonList
-          lessons={training.lessons}
-          title={title}
-          trainingId={training.id}
-          progress={progressForList}
-          initialLessonId={initialLessonId}
-        />
+        {canAccess ? (
+          <TrainingLessonList
+            lessons={training.lessons}
+            title={title}
+            trainingId={training.id}
+            progress={progressForList}
+            initialLessonId={initialLessonId}
+          />
+        ) : (
+          <PurchasePanel
+            trainingId={training.id}
+            priceXaf={training.priceXaf}
+            locale={locale}
+            loggedIn={Boolean(currentUser)}
+          />
+        )}
       </div>
 
       {presentation && (

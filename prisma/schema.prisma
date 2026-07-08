@@ -56,6 +56,19 @@ enum UserTokenType {
   PASSWORD_RESET
 }
 
+enum PaymentChannel {
+  ORANGE_MONEY
+  MTN_MOMO
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+  CANCELLED
+  EXPIRED
+}
+
 model AdminUser {
   id           String    @id @default(cuid())
   name         String
@@ -246,6 +259,8 @@ model Training {
   viewCount       Int                @default(0)
   order           Int                @default(0)
   published       Boolean            @default(true)
+  isPremium       Boolean            @default(false)
+  priceXaf        Int                @default(0)
   createdAt       DateTime           @default(now())
   updatedAt       DateTime           @updatedAt
   lessons         TrainingLesson[]
@@ -254,6 +269,7 @@ model Training {
   comments        TrainingComment[]
   lessonProgress  LessonProgress[]
   certificates    Certificate[]
+  orders          Order[]
 }
 
 model TrainingLesson {
@@ -332,6 +348,21 @@ model Certificate {
   @@unique([userId, trainingId])
 }
 
+model Order {
+  id                String         @id @default(cuid())
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  training          Training       @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId        String
+  amountXaf         Int
+  channel           PaymentChannel
+  phoneNumber       String
+  status            OrderStatus    @default(PENDING)
+  notchpayReference String         @unique
+  createdAt         DateTime       @default(now())
+  paidAt            DateTime?
+}
+
 model User {
   id              String           @id @default(cuid())
   name            String
@@ -345,6 +376,7 @@ model User {
   tokens          UserToken[]
   lessonProgress  LessonProgress[]
   certificates    Certificate[]
+  orders          Order[]
 }
 
 model UserSession {

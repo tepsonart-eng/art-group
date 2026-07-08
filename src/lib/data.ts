@@ -125,6 +125,14 @@ export async function getUserCertificates(userId: string) {
   });
 }
 
+export async function getUserOrders(userId: string) {
+  return prisma.order.findMany({
+    where: { userId },
+    include: { training: true },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function getCertificateByNumber(certificateNumber: string) {
   return prisma.certificate.findUnique({
     where: { certificateNumber },

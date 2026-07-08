@@ -76,6 +76,16 @@ export default async function AdminTrainingsPage() {
                 defaultValue={String(training.durationMinutes)}
               />
               <TextField name="order" label="Ordre" type="number" defaultValue={String(training.order)} />
+              <TextField
+                name="priceXaf"
+                label="Prix (FCFA, 0 = gratuite)"
+                type="number"
+                defaultValue={String(training.priceXaf)}
+              />
+              <label className="flex items-center gap-2 text-sm">
+                <input type="checkbox" name="isPremium" defaultChecked={training.isPremium} />
+                Formation premium (payante)
+              </label>
               <div className="sm:col-span-2">
                 <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-text-muted">
                   Miniature (JPG/PNG)
@@ -285,6 +295,11 @@ export default async function AdminTrainingsPage() {
           <SelectField name="level" label="Niveau" defaultValue="BEGINNER" options={levelOptions} />
           <TextField name="durationMinutes" label="Durée (minutes)" type="number" defaultValue="0" />
           <TextField name="order" label="Ordre" type="number" defaultValue="0" />
+          <TextField name="priceXaf" label="Prix (FCFA, 0 = gratuite)" type="number" defaultValue="0" />
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" name="isPremium" />
+            Formation premium (payante)
+          </label>
           <div className="sm:col-span-2">
             <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-text-muted">
               Miniature (JPG/PNG)

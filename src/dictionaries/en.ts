@@ -103,8 +103,6 @@ const en: Dictionary = {
     saveChanges: "Save",
     saving: "Saving...",
     logoutButton: "Log out",
-    futurePhasesNotice:
-      "Your purchases will appear here as upcoming features are released.",
     alreadyHaveAccount: "Already have an account?",
     noAccountYet: "Don't have an account yet?",
     memberSince: "Member since",
@@ -114,6 +112,8 @@ const en: Dictionary = {
     noCertificatesYet: "You haven't earned any certificate yet.",
     downloadCertificate: "Download",
     certificateEarnedBadge: "Certificate earned",
+    myOrdersTitle: "My purchases",
+    noOrdersYet: "You haven't made any purchase yet.",
   },
   trainings: {
     titleAccent: "Our",
@@ -152,6 +152,20 @@ const en: Dictionary = {
     issuedOnLabel: "Issued on",
     participantLabel: "Participant",
     trainingLabel: "Training",
+  },
+  checkout: {
+    premiumTitle: "Premium training",
+    channelLabel: "Payment method",
+    phoneLabel: "Mobile Money number",
+    submit: "Pay now",
+    submitting: "Sending request...",
+    loginRequired: "Log in to purchase this training.",
+    waitingTitle: "Waiting for confirmation",
+    waitingText: "Confirm the payment on your phone (USSD prompt or app).",
+    paymentSuccess: "Payment confirmed! You now have access to the training.",
+    paymentFailed: "The payment did not go through.",
+    reloadButton: "Access the training",
+    retryButton: "Try again",
   },
   cta: {
     titleAccent: "Got a project?",

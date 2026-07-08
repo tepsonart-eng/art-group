@@ -6,6 +6,7 @@ import { getDictionary } from "@/lib/i18n";
 import { ProfileForm } from "@/components/account/profile-form";
 import { MyTrainings } from "@/components/account/my-trainings";
 import { MyCertificates } from "@/components/account/my-certificates";
+import { MyOrders } from "@/components/account/my-orders";
 
 export default async function AccountPage({
   params,
@@ -57,10 +58,17 @@ export default async function AccountPage({
       </div>
 
       <div className="mt-6">
-        <ProfileForm name={user.name} />
+        <MyOrders
+          userId={user.id}
+          locale={locale}
+          title={dict.account.myOrdersTitle}
+          emptyText={dict.account.noOrdersYet}
+        />
       </div>
 
-      <p className="mt-6 text-sm italic text-text-muted">{dict.account.futurePhasesNotice}</p>
+      <div className="mt-6">
+        <ProfileForm name={user.name} />
+      </div>
 
       <form action={logout.bind(null, locale)} className="mt-8">
         <button type="submit" className="text-sm font-semibold text-accent hover:underline">

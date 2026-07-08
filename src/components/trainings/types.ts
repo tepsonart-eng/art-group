@@ -46,4 +46,6 @@ export type TrainingCardEntry = {
   createdAt: Date;
   category: TrainingCategoryEntry;
   lessons: TrainingLessonEntry[];
+  isPremium: boolean;
+  priceXaf: number;
 };

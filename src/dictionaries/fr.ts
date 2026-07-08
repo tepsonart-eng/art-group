@@ -101,8 +101,6 @@ const fr = {
     saveChanges: "Enregistrer",
     saving: "Enregistrement...",
     logoutButton: "Se déconnecter",
-    futurePhasesNotice:
-      "Vos achats apparaîtront ici au fur et à mesure du déploiement des prochaines fonctionnalités.",
     alreadyHaveAccount: "Vous avez déjà un compte ?",
     noAccountYet: "Pas encore de compte ?",
     memberSince: "Membre depuis",
@@ -112,6 +110,8 @@ const fr = {
     noCertificatesYet: "Vous n'avez pas encore obtenu de certificat.",
     downloadCertificate: "Télécharger",
     certificateEarnedBadge: "Certificat obtenu",
+    myOrdersTitle: "Mes achats",
+    noOrdersYet: "Vous n'avez pas encore effectué d'achat.",
   },
   trainings: {
     titleAccent: "Nos",
@@ -150,6 +150,20 @@ const fr = {
     issuedOnLabel: "Délivré le",
     participantLabel: "Participant",
     trainingLabel: "Formation",
+  },
+  checkout: {
+    premiumTitle: "Formation premium",
+    channelLabel: "Moyen de paiement",
+    phoneLabel: "Numéro Mobile Money",
+    submit: "Payer maintenant",
+    submitting: "Envoi de la demande...",
+    loginRequired: "Connectez-vous pour acheter cette formation.",
+    waitingTitle: "En attente de confirmation",
+    waitingText: "Confirmez le paiement sur votre téléphone (invite USSD ou application).",
+    paymentSuccess: "Paiement confirmé ! Vous avez maintenant accès à la formation.",
+    paymentFailed: "Le paiement n'a pas abouti.",
+    reloadButton: "Accéder à la formation",
+    retryButton: "Réessayer",
   },
   cta: {
     titleAccent: "Vous avez un projet ?",
