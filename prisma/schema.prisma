@@ -69,6 +69,16 @@ enum OrderStatus {
   EXPIRED
 }
 
+enum ResourceType {
+  EBOOK
+  GUIDE
+  COURSE_MATERIAL
+  CHECKLIST
+  TECHNICAL_SHEET
+  EDUCATIONAL_DOCUMENT
+  OTHER
+}
+
 model AdminUser {
   id           String    @id @default(cuid())
   name         String
@@ -238,6 +248,7 @@ model TrainingCategory {
   nameEn    String
   order     Int        @default(0)
   trainings Training[]
+  resources Resource[]
 }
 
 model Training {
@@ -361,6 +372,24 @@ model Order {
   notchpayReference String         @unique
   createdAt         DateTime       @default(now())
   paidAt            DateTime?
+}
+
+model Resource {
+  id             String           @id @default(cuid())
+  category       TrainingCategory @relation(fields: [categoryId], references: [id])
+  categoryId     String
+  type           ResourceType     @default(OTHER)
+  titleFr        String
+  titleEn        String
+  descriptionFr  String           @default("")
+  descriptionEn  String           @default("")
+  coverImagePath String?
+  filePath       String
+  fileSizeBytes  Int              @default(0)
+  downloadCount  Int              @default(0)
+  order          Int              @default(0)
+  published      Boolean          @default(true)
+  createdAt      DateTime         @default(now())
 }
 
 model User {

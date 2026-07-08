@@ -143,6 +143,13 @@ const en: Dictionary = {
     markIncomplete: "Mark as incomplete",
     resumeButton: "Resume",
   },
+  resources: {
+    navLabel: "Resources",
+    titleBold: "resources",
+    allCategoriesTab: "All",
+    empty: "No resources in this category yet.",
+    downloadButton: "Download",
+  },
   certificates: {
     verifyTitle: "Verify a certificate",
     codeLabel: "Certificate number",

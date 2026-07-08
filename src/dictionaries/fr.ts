@@ -141,6 +141,13 @@ const fr = {
     markIncomplete: "Marquer comme non terminée",
     resumeButton: "Reprendre",
   },
+  resources: {
+    navLabel: "Ressources",
+    titleBold: "ressources",
+    allCategoriesTab: "Tout",
+    empty: "Aucune ressource dans cette catégorie pour le moment.",
+    downloadButton: "Télécharger",
+  },
   certificates: {
     verifyTitle: "Vérifier un certificat",
     codeLabel: "Numéro de certificat",

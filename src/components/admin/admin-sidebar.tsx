@@ -14,6 +14,7 @@ const links = [
   { href: "/admin/trainings", label: "Formations" },
   { href: "/admin/training-categories", label: "Catégories formations" },
   { href: "/admin/training-comments", label: "Commentaires formations" },
+  { href: "/admin/resources", label: "Ressources PDF" },
   { href: "/admin/orders", label: "Commandes" },
   { href: "/admin/team", label: "Équipe" },
   { href: "/admin/testimonials", label: "Témoignages" },

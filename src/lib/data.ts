@@ -55,6 +55,14 @@ export async function getTrainingCategories() {
   return prisma.trainingCategory.findMany({ orderBy: { order: "asc" } });
 }
 
+export async function getResources() {
+  return prisma.resource.findMany({
+    where: { published: true },
+    orderBy: { order: "asc" },
+    include: { category: true },
+  });
+}
+
 export async function getTrainings() {
   return prisma.training.findMany({
     where: { published: true },

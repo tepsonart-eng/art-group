@@ -51,6 +51,7 @@ export function Header({
     { href: `/${locale}#competences`, label: dict.skills.titleBold },
     { href: `/${locale}#realisations`, label: dict.portfolio.titleBold },
     { href: `/${locale}/formations`, label: dict.trainings.navLabel },
+    { href: `/${locale}/ressources`, label: dict.resources.navLabel },
     { href: `/${locale}#agence`, label: dict.agency.titleBold },
     { href: `/${locale}#contact`, label: dict.nav.contact },
   ];

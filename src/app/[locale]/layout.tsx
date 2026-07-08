@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { isValidLocale, type Locale } from "@/lib/i18n";
 import { getDictionary } from "@/lib/i18n";
 import { getSiteSettings } from "@/lib/settings";
-import { getFaqItems, getCommitmentItems, getVisibleSocialLinks, getProjects, getTrainings } from "@/lib/data";
+import { getFaqItems, getCommitmentItems, getVisibleSocialLinks, getProjects, getTrainings, getResources } from "@/lib/data";
 import { getCurrentUser } from "@/lib/user-auth";
 import { DictionaryProvider } from "@/components/dictionary-provider";
 import { AboutModalProvider } from "@/components/about-modal-provider";
@@ -25,7 +25,7 @@ export default async function LocaleLayout({
   if (!isValidLocale(rawLocale)) notFound();
   const locale = rawLocale as Locale;
 
-  const [dict, settings, faqItems, commitments, socialLinks, projects, trainings, currentUser] = await Promise.all([
+  const [dict, settings, faqItems, commitments, socialLinks, projects, trainings, resources, currentUser] = await Promise.all([
     getDictionary(locale),
     getSiteSettings(),
     getFaqItems(),
@@ -33,6 +33,7 @@ export default async function LocaleLayout({
     getVisibleSocialLinks(),
     getProjects(),
     getTrainings(),
+    getResources(),
     getCurrentUser(),
   ]);
 
@@ -46,6 +47,11 @@ export default async function LocaleLayout({
       label: locale === "fr" ? t.titleFr : t.titleEn,
       href: `/${locale}/formations/${t.slug}`,
       group: dict.trainings.titleBold,
+    })),
+    ...resources.map((r) => ({
+      label: locale === "fr" ? r.titleFr : r.titleEn,
+      href: `/${locale}/ressources`,
+      group: dict.resources.titleBold,
     })),
     ...faqItems.map((f) => ({
       label: locale === "fr" ? f.questionFr : f.questionEn,
