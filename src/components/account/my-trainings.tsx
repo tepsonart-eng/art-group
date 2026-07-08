@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Award } from "lucide-react";
 import type { Locale } from "@/lib/i18n";
 import { getUserTrainingsProgress } from "@/lib/data";
 
@@ -8,12 +9,14 @@ export async function MyTrainings({
   title,
   emptyText,
   resumeLabel,
+  certificateEarnedLabel,
 }: {
   userId: string;
   locale: Locale;
   title: string;
   emptyText: string;
   resumeLabel: string;
+  certificateEarnedLabel: string;
 }) {
   const items = await getUserTrainingsProgress(userId);
 
@@ -24,7 +27,7 @@ export async function MyTrainings({
         <p className="mt-3 text-sm text-text-muted">{emptyText}</p>
       ) : (
         <div className="mt-4 space-y-3">
-          {items.map(({ training, percent, completedCount, totalLessons }) => (
+          {items.map(({ training, percent, completedCount, totalLessons, certificateId }) => (
             <Link
               key={training.id}
               href={`/${locale}/formations/${training.slug}`}
@@ -53,7 +56,13 @@ export async function MyTrainings({
                   </span>
                 </div>
               </div>
-              <span className="shrink-0 text-xs font-semibold text-accent">{resumeLabel}</span>
+              {percent === 100 && certificateId ? (
+                <span className="flex shrink-0 items-center gap-1.5 text-xs font-semibold text-accent">
+                  <Award size={14} /> {certificateEarnedLabel}
+                </span>
+              ) : (
+                <span className="shrink-0 text-xs font-semibold text-accent">{resumeLabel}</span>
+              )}
             </Link>
           ))}
         </div>

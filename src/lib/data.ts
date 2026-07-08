@@ -90,10 +90,13 @@ export async function getUserTrainingsProgress(userId: string) {
   if (progressRows.length === 0) return [];
 
   const trainingIds = Array.from(new Set(progressRows.map((r) => r.trainingId)));
-  const trainings = await prisma.training.findMany({
-    where: { id: { in: trainingIds } },
-    include: { lessons: true },
-  });
+  const [trainings, certificates] = await Promise.all([
+    prisma.training.findMany({
+      where: { id: { in: trainingIds } },
+      include: { lessons: true },
+    }),
+    prisma.certificate.findMany({ where: { userId, trainingId: { in: trainingIds } } }),
+  ]);
 
   return trainingIds
     .map((trainingId) => {
@@ -107,8 +110,24 @@ export async function getUserTrainingsProgress(userId: string) {
         (latest, r) => (r.lastWatchedAt > latest ? r.lastWatchedAt : latest),
         rowsForTraining[0].lastWatchedAt
       );
-      return { training, percent, completedCount, totalLessons, lastWatchedAt };
+      const certificateId = certificates.find((c) => c.trainingId === trainingId)?.id ?? null;
+      return { training, percent, completedCount, totalLessons, lastWatchedAt, certificateId };
     })
     .filter((x): x is NonNullable<typeof x> => x !== null)
     .sort((a, b) => b.lastWatchedAt.getTime() - a.lastWatchedAt.getTime());
+}
+
+export async function getUserCertificates(userId: string) {
+  return prisma.certificate.findMany({
+    where: { userId },
+    include: { training: true },
+    orderBy: { issuedAt: "desc" },
+  });
+}
+
+export async function getCertificateByNumber(certificateNumber: string) {
+  return prisma.certificate.findUnique({
+    where: { certificateNumber },
+    include: { training: true, user: true },
+  });
 }

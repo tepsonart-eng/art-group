@@ -253,6 +253,7 @@ model Training {
   faqItems        TrainingFaqItem[]
   comments        TrainingComment[]
   lessonProgress  LessonProgress[]
+  certificates    Certificate[]
 }
 
 model TrainingLesson {
@@ -319,6 +320,18 @@ model LessonProgress {
   @@unique([userId, lessonId])
 }
 
+model Certificate {
+  id                String   @id @default(cuid())
+  certificateNumber String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId            String
+  training          Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  trainingId        String
+  issuedAt          DateTime @default(now())
+
+  @@unique([userId, trainingId])
+}
+
 model User {
   id              String           @id @default(cuid())
   name            String
@@ -331,6 +344,7 @@ model User {
   sessions        UserSession[]
   tokens          UserToken[]
   lessonProgress  LessonProgress[]
+  certificates    Certificate[]
 }
 
 model UserSession {

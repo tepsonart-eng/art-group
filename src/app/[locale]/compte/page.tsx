@@ -5,6 +5,7 @@ import { logout } from "@/actions/user-auth";
 import { getDictionary } from "@/lib/i18n";
 import { ProfileForm } from "@/components/account/profile-form";
 import { MyTrainings } from "@/components/account/my-trainings";
+import { MyCertificates } from "@/components/account/my-certificates";
 
 export default async function AccountPage({
   params,
@@ -41,6 +42,17 @@ export default async function AccountPage({
           title={dict.account.myTrainingsTitle}
           emptyText={dict.account.noTrainingsYet}
           resumeLabel={dict.trainings.resumeButton}
+          certificateEarnedLabel={dict.account.certificateEarnedBadge}
+        />
+      </div>
+
+      <div className="mt-6">
+        <MyCertificates
+          userId={user.id}
+          locale={locale}
+          title={dict.account.myCertificatesTitle}
+          emptyText={dict.account.noCertificatesYet}
+          downloadLabel={dict.account.downloadCertificate}
         />
       </div>
 

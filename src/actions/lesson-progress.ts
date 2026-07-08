@@ -2,6 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/user-auth";
+import { issueCertificateIfComplete } from "@/lib/certificate";
 
 export async function recordLessonView(lessonId: string, trainingId: string) {
   const user = await getCurrentUser();
@@ -29,4 +30,8 @@ export async function toggleLessonComplete(lessonId: string, trainingId: string,
       completedAt: completed ? new Date() : null,
     },
   });
+
+  if (completed) {
+    await issueCertificateIfComplete(user.id, trainingId);
+  }
 }
