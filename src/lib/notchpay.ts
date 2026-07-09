@@ -11,7 +11,7 @@ function apiKey() {
 }
 
 type InitializePaymentResult = {
-  transaction: string;
+  transaction: { reference: string; status: string; [key: string]: unknown };
   authorization_url: string;
 };
 

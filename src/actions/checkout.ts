@@ -96,11 +96,11 @@ export async function initiatePurchase(
         amountXaf,
         channel: parsed.data.channel,
         phoneNumber: phone,
-        notchpayReference: init.transaction,
+        notchpayReference: init.transaction.reference,
       },
     });
 
-    await processMobileMoneyPayment(init.transaction, {
+    await processMobileMoneyPayment(init.transaction.reference, {
       channel: channelMap[parsed.data.channel],
       phone,
     });
