@@ -113,6 +113,8 @@ const fr = {
     certificateEarnedBadge: "Certificat obtenu",
     myOrdersTitle: "Mes achats",
     noOrdersYet: "Vous n'avez pas encore effectué d'achat.",
+    myCommentsTitle: "Mes commentaires",
+    noCommentsYet: "Vous n'avez pas encore laissé de commentaire.",
   },
   trainings: {
     titleAccent: "Nos",
@@ -141,6 +143,8 @@ const fr = {
     markComplete: "Marquer comme terminée",
     markIncomplete: "Marquer comme non terminée",
     resumeButton: "Reprendre",
+    verifiedBadge: "Membre",
+    likeButton: "J'aime",
   },
   resources: {
     navLabel: "Ressources",

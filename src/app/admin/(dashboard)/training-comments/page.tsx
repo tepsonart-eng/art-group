@@ -26,7 +26,14 @@ export default async function AdminTrainingCommentsPage() {
             <div className="flex flex-wrap items-center justify-between gap-2">
               <div>
                 <p className="font-display font-semibold">
-                  {comment.authorName} <span className="text-xs text-text-muted">({comment.authorEmail})</span>
+                  {comment.authorName} <span className="text-xs text-text-muted">({comment.authorEmail})</span>{" "}
+                  <span
+                    className={`text-xs font-semibold ${
+                      comment.userId ? "text-accent" : "text-text-muted"
+                    }`}
+                  >
+                    {comment.userId ? "Membre" : "Invité"}
+                  </span>
                 </p>
                 <p className="text-xs text-text-muted">
                   Formation : {comment.training.titleFr} · {comment.status} · IP {comment.ipAddress}

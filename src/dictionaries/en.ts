@@ -115,6 +115,8 @@ const en: Dictionary = {
     certificateEarnedBadge: "Certificate earned",
     myOrdersTitle: "My purchases",
     noOrdersYet: "You haven't made any purchase yet.",
+    myCommentsTitle: "My comments",
+    noCommentsYet: "You haven't left any comment yet.",
   },
   trainings: {
     titleAccent: "Our",
@@ -143,6 +145,8 @@ const en: Dictionary = {
     markComplete: "Mark as complete",
     markIncomplete: "Mark as incomplete",
     resumeButton: "Resume",
+    verifiedBadge: "Member",
+    likeButton: "Like",
   },
   resources: {
     navLabel: "Resources",

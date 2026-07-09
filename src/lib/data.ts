@@ -94,8 +94,24 @@ export async function getTrainingBySlug(slug: string) {
       lessons: { orderBy: { order: "asc" } },
       resources: { orderBy: { order: "asc" } },
       faqItems: { orderBy: { order: "asc" } },
-      comments: { where: { status: "APPROVED" }, orderBy: { createdAt: "desc" } },
+      comments: {
+        where: { status: "APPROVED" },
+        orderBy: { createdAt: "desc" },
+        include: {
+          user: { select: { avatarPath: true } },
+          likes: { select: { userId: true } },
+          _count: { select: { likes: true } },
+        },
+      },
     },
+  });
+}
+
+export async function getUserComments(userId: string) {
+  return prisma.trainingComment.findMany({
+    where: { userId },
+    include: { training: { select: { slug: true, titleFr: true, titleEn: true } } },
+    orderBy: { createdAt: "desc" },
   });
 }
 

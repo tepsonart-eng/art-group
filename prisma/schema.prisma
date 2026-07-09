@@ -325,12 +325,26 @@ model TrainingComment {
   id          String       @id @default(cuid())
   training    Training     @relation(fields: [trainingId], references: [id], onDelete: Cascade)
   trainingId  String
+  user        User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId      String?
   authorName  String
   authorEmail String
   comment     String
   status      ReviewStatus @default(PENDING)
   ipAddress   String       @default("")
   createdAt   DateTime     @default(now())
+  likes       CommentLike[]
+}
+
+model CommentLike {
+  id        String          @id @default(cuid())
+  comment   TrainingComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+  commentId String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  createdAt DateTime        @default(now())
+
+  @@unique([commentId, userId])
 }
 
 model LessonProgress {
@@ -436,6 +450,8 @@ model User {
   lessonProgress  LessonProgress[]
   certificates    Certificate[]
   orders          Order[]
+  trainingComments TrainingComment[]
+  commentLikes     CommentLike[]
 }
 
 model UserSession {

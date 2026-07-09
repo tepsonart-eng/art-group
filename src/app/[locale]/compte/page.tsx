@@ -7,6 +7,7 @@ import { ProfileForm } from "@/components/account/profile-form";
 import { MyTrainings } from "@/components/account/my-trainings";
 import { MyCertificates } from "@/components/account/my-certificates";
 import { MyOrders } from "@/components/account/my-orders";
+import { MyComments } from "@/components/account/my-comments";
 
 export default async function AccountPage({
   params,
@@ -63,6 +64,15 @@ export default async function AccountPage({
           locale={locale}
           title={dict.account.myOrdersTitle}
           emptyText={dict.account.noOrdersYet}
+        />
+      </div>
+
+      <div className="mt-6">
+        <MyComments
+          userId={user.id}
+          locale={locale}
+          title={dict.account.myCommentsTitle}
+          emptyText={dict.account.noCommentsYet}
         />
       </div>
 

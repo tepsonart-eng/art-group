@@ -164,7 +164,20 @@ export default async function TrainingDetailPage({
       <section className="mt-10 border-t border-line pt-8">
         <h2 className="font-display text-xl font-bold">{locale === "fr" ? "Commentaires" : "Comments"}</h2>
         <div className="mt-4">
-          <TrainingComments trainingId={training.id} comments={training.comments} />
+          <TrainingComments
+            trainingId={training.id}
+            loggedIn={Boolean(currentUser)}
+            comments={training.comments.map((c) => ({
+              id: c.id,
+              userId: c.userId,
+              userAvatarPath: c.user?.avatarPath ?? null,
+              authorName: c.authorName,
+              comment: c.comment,
+              createdAt: c.createdAt,
+              likesCount: c._count.likes,
+              likedByCurrentUser: currentUser ? c.likes.some((l) => l.userId === currentUser.id) : false,
+            }))}
+          />
         </div>
       </section>
     </article>

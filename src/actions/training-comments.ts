@@ -4,11 +4,12 @@ import { z } from "zod";
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { getSiteSettings } from "@/lib/settings";
+import { getCurrentUser } from "@/lib/user-auth";
 
 const commentSchema = z.object({
   trainingId: z.string().trim().min(1),
-  authorName: z.string().trim().min(1),
-  authorEmail: z.string().trim().email(),
+  authorName: z.string().trim().min(1).optional(),
+  authorEmail: z.string().trim().email().optional(),
   comment: z.string().trim().min(1),
 });
 
@@ -25,14 +26,20 @@ export async function submitTrainingComment(
     return { status: "success" };
   }
 
+  const currentUser = await getCurrentUser();
+
   const parsed = commentSchema.safeParse({
     trainingId: formData.get("trainingId"),
-    authorName: formData.get("authorName"),
-    authorEmail: formData.get("authorEmail"),
+    authorName: formData.get("authorName") || undefined,
+    authorEmail: formData.get("authorEmail") || undefined,
     comment: formData.get("comment"),
   });
 
   if (!parsed.success) {
+    return { status: "error" };
+  }
+
+  if (!currentUser && (!parsed.data.authorName || !parsed.data.authorEmail)) {
     return { status: "error" };
   }
 
@@ -49,8 +56,9 @@ export async function submitTrainingComment(
   await prisma.trainingComment.create({
     data: {
       trainingId: parsed.data.trainingId,
-      authorName: parsed.data.authorName,
-      authorEmail: parsed.data.authorEmail,
+      userId: currentUser?.id,
+      authorName: currentUser?.name ?? parsed.data.authorName!,
+      authorEmail: currentUser?.email ?? parsed.data.authorEmail!,
       comment: parsed.data.comment,
       ipAddress: ip,
       status: settings.reviewModeration ? "PENDING" : "APPROVED",

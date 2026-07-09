@@ -20,9 +20,13 @@ export type TrainingResourceEntry = {
 
 export type TrainingCommentEntry = {
   id: string;
+  userId: string | null;
+  userAvatarPath: string | null;
   authorName: string;
   comment: string;
   createdAt: Date;
+  likesCount: number;
+  likedByCurrentUser: boolean;
 };
 
 export type TrainingCategoryEntry = {
