@@ -7,6 +7,7 @@ import type { CurrentAdmin } from "@/lib/auth";
 
 const links = [
   { href: "/admin", label: "Vue d'ensemble" },
+  { href: "/admin/analytics", label: "Analytique" },
   { href: "/admin/settings", label: "Paramètres du site" },
   { href: "/admin/categories", label: "Compétences" },
   { href: "/admin/projects", label: "Réalisations" },
